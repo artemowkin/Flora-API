@@ -12,24 +12,6 @@ First of all, you need to [install Docker](https://docs.docker.com/engine/instal
 $ sudo -H pip3 install docker-compose
 ```
 
-### .env
-
-And then you need to create `.env` file with follow code:
-
-```
-# Security
-ENVIRONMENT=development
-SECRET_KEY=l6fht0!$0xmca@4sz*2er9-3&k^27dyrol-@va8n8k%*v2&wmb
-DEBUG=1
-
-# Database
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_HOST=db
-DB_PORT=5432
-```
-
 ### Build Image
 
 If you run this project for the first time you need to build Docker image
