@@ -15,5 +15,5 @@ class PostSearchView(ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('q', '')
         return super().get_queryset().filter(title__icontains=query)
