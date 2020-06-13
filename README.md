@@ -27,3 +27,11 @@ Now you can up container with this project:
 ```
 $ docker-compose up -d
 ```
+
+### Superuser
+
+To access the API you need to create a superuser who can use it
+
+```
+$ docker-compose exec web python manage.py createsuperuser
+```
