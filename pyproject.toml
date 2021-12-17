@@ -12,6 +12,7 @@ psycopg2-binary = "^2.9.2"
 djangorestframework = "^3.13.1"
 PyYAML = "^6.0"
 uritemplate = "^4.1.1"
+Pillow = "^8.4.0"
 
 [tool.poetry.dev-dependencies]
 

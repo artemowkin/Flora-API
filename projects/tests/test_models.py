@@ -5,13 +5,13 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from categories.models import Category
-from ..models import Project
+from ..models import Project, ProjectImage
 
 
 User = get_user_model()
 
 
-class ProjectModelTestCase(TestCase):
+class BaseProjectModelTestCase(TestCase):
 
 	def setUp(self):
 		self.user = User.objects.create_superuser(
@@ -23,6 +23,9 @@ class ProjectModelTestCase(TestCase):
 			category=self.category, user=self.user
 		)
 
+
+class ProjectModelTestCase(BaseProjectModelTestCase):
+
 	def test_created_project_fields(self):
 		self.assertIsInstance(self.project.pk, UUID)
 		self.assertEqual(self.project.title, 'Some project')
@@ -33,3 +36,26 @@ class ProjectModelTestCase(TestCase):
 
 	def test_string_representation(self):
 		self.assertEqual(str(self.project), 'Some project')
+
+	def test_user_related_field(self):
+		self.assertEqual(self.user.projects.count(), 1)
+		self.assertEqual(self.user.projects.get(), self.project)
+
+	def test_category_related_field(self):
+		self.assertEqual(self.category.projects.count(), 1)
+		self.assertEqual(self.category.projects.get(), self.project)
+
+
+class ProjectImageModelTestCase(BaseProjectModelTestCase):
+
+	def setUp(self):
+		super().setUp()
+		self.project_image = ProjectImage.objects.create(
+			image='some_image.jpg', project=self.project
+		)
+
+	def test_created_project_fields(self):
+		self.assertEqual(
+			self.project_image.image.url, '/media/some_image.jpg'
+		)
+		self.assertEqual(self.project_image.project, self.project)

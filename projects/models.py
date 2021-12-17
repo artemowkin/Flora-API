@@ -16,10 +16,12 @@ class Project(models.Model):
 	title = models.CharField('project title', max_length=255)
 	description = models.TextField('project description')
 	category = models.ForeignKey(
-		Category, on_delete=models.CASCADE, verbose_name='project category'
+		Category, on_delete=models.CASCADE, verbose_name='project category',
+		related_name='projects'
 	)
 	user = models.ForeignKey(
-		User, on_delete=models.CASCADE, verbose_name='project user'
+		User, on_delete=models.CASCADE, verbose_name='project user',
+		related_name='projects'
 	)
 	pub_datetime = models.DateTimeField(auto_now_add=True)
 
@@ -31,3 +33,15 @@ class Project(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class ProjectImage(models.Model):
+	"""Image for project"""
+
+	image = models.ImageField('project image', upload_to='projects')
+	project = models.ForeignKey(
+		Project, on_delete=models.CASCADE, related_name='images'
+	)
+
+	class Meta:
+		db_table = 'project_images'
