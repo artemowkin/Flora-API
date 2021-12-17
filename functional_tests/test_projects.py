@@ -29,6 +29,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			'pk': str(self.project.pk),
 			'title': self.project.title,
 			'description': self.project.description,
+			'images': [],
 			'category': {'pk': self.category.pk, 'title': self.category.title},
 			'user': self.user.username,
 			'pub_datetime': self.project.pub_datetime
