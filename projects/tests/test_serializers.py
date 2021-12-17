@@ -30,6 +30,7 @@ class ProjectSerializerTestCase(TestCase):
 			'pk': str(self.project.pk),
 			'title': self.project.title,
 			'description': self.project.description,
+			'images': [{'image': '/media/some_image.jpg'}],
 			'category': self.category.pk,
 			'user': self.user.username,
 			'pub_datetime': project_pub_datetime,
@@ -37,8 +38,12 @@ class ProjectSerializerTestCase(TestCase):
 
 	def test_serialized_project(self):
 		serialized_project = ProjectSerializer(self.project).data
+		serialized_project['images'][0] = dict(serialized_project['images'][0])
 		self.assertEqual(serialized_project, self.project_data)
 
 	def test_is_data_valid(self):
-		serializer = ProjectSerializer(data=self.project_data)
+		serializer = ProjectSerializer(data={
+			'title': 'some title', 'description': 'some description',
+			'category': self.category.pk
+		})
 		self.assertTrue(serializer.is_valid())

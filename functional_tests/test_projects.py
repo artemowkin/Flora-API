@@ -23,14 +23,13 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 	def test_get_all_projects(self):
 		response = self.client.get('/api/v1/projects/')
 		self.assertEqual(response.status_code, 200)
-		self.assertEqual(response.content_type, 'application/json')
 		json = response.json()
 		self.assertEqual(json, [{
 			'pk': str(self.project.pk),
 			'title': self.project.title,
 			'description': self.project.description,
 			'images': [],
-			'category': {'pk': self.category.pk, 'title': self.category.title},
+			'category': str(self.category.pk),
 			'user': self.user.username,
-			'pub_datetime': self.project.pub_datetime
+			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'
 		}])

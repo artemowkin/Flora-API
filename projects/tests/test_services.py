@@ -1,7 +1,5 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
-from django.core.exceptions import PermissionDenied
 
 from ..services import GetProjectsService
 from ..models import Project
@@ -23,12 +21,8 @@ class GetProjectsServiceTestCase(TestCase):
 			category=self.category, user=self.user
 		)
 
-	def test_get_all_with_authenticated_user(self):
-		service = GetProjectsService(self.user)
+	def test_get_all(self):
+		service = GetProjectsService()
 		all_projects = service.get_all()
 		self.assertEqual(all_projects.count(), 1)
 		self.assertEqual(all_projects[0], self.project)
-
-	def test_get_all_with_not_authenticated_user(self):
-		with self.assertRaises(PermissionDenied):
-			service = GetProjectsService(AnonymousUser())

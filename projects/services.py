@@ -11,9 +11,7 @@ User = get_user_model()
 class GetProjectsService:
 	"""Service to get projects entries"""
 
-	def __init__(self, user: User) -> None:
-		if not user.is_staff: raise PermissionDenied
-		self._user = user
+	def __init__(self) -> None:
 		self._model = Project
 
 	def get_all(self) -> QuerySet:
