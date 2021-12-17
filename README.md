@@ -102,6 +102,11 @@ If you want to run the functional tests you need to do the following command:
 $ python manage.py test functional_tests
 ```
 
+## Documentation
+
+Documentation for API is available on http://127.0.0.1:8000/redoc/ on
+running project.
+
 ## Authors
 
 * **Artemowkin** (Backend API) - https://github.com/artemowkin/
