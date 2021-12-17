@@ -39,5 +39,6 @@ jobs:
         DJANGO_DB_PORT: 5432
         DJANGO_DB_USER: django
         DJANGO_DB_PASSWORD: django
+        DJANGO_SECRET_KEY: "!mg@0%q)m6bw61@!(39%q1+64imyvaa4#!n6py9+8tb2l@1(nu"
       run: |
         python manage.py test functional_tests categories projects
