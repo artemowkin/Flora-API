@@ -2,4 +2,65 @@ openapi: 3.0.2
 info:
   title: 'Flora API'
   version: '1.0.0'
-paths: {}
+paths:
+  /api/v1/projects/?page=n:
+    get:
+      operationId: allProjects
+      description: All art projects
+      parameters:
+      - name: page
+        in: path
+        required: false
+        description: page number (only 20 projects on page)
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProjects'
+
+components:
+  schemas:
+    Project:
+      type: object
+      properties:
+        pk:
+          type: string
+          example: "c840ad15-0760-4e05-b510-31c71d49da3b"
+          minLength: 36
+          maxLength: 36
+        title:
+          type: string
+          example: "Some title"
+          maxLength: 255
+          minLength: 1
+        description:
+          type: string
+          example: "Some description"
+          minLength: 1
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              image:
+                type: string
+                example: "/media/projects/some_image.png"
+                minLength: 1
+        category:
+          type: string
+          example: "c840ad15-0760-4e05-b510-31c71d49da3b"
+          minLength: 36
+          maxLength: 36
+        user:
+          type: string
+          example: "user"
+        pub_datetime:
+          type: string
+          example: "2021-12-17T19:26:52.517853Z"
+    ListProjects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Project'
