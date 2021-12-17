@@ -15,7 +15,7 @@ jobs:
         db: postgres
         python-version: [3.7, 3.8, 3.9]
         include:
-          - db: postgres
+          - db: floradb
             db_port: 5432
     services:
       postgres:
@@ -45,7 +45,7 @@ jobs:
       env:
         DJANGO_DB_HOST: 127.0.0.1
         DJANGO_DB_PORT: ${{ matrix.db_port }}
-        DJANGO_DB_USEr: django
+        DJANGO_DB_USER: django
         DJANGO_DB_PASSWORD: django
       run: |
         python manage.py test
