@@ -105,7 +105,7 @@ $ python manage.py test functional_tests
 ## Authors
 
 * **Artemowkin** (Backend API) - https://github.com/artemowkin/
-* **steelWinds** (Frontend App)
+* **steelWinds** (Frontend App) - https://github.com/steelWinds/
 
 ## License
 
