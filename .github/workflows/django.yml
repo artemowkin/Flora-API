@@ -12,22 +12,14 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        db: postgres
         python-version: [3.7, 3.8, 3.9]
-        include:
-          - db: floradb
-            db_port: 5432
     services:
       postgres:
-        image: postgres:10
+        image: postgres
         env:
+          POSTGRES_DB: floradb
           POSTGRES_USER: django
           POSTGRES_PASSWORD: django
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
         ports:
           - 5432:5432
     steps:
@@ -44,7 +36,7 @@ jobs:
     - name: Run Tests
       env:
         DJANGO_DB_HOST: 127.0.0.1
-        DJANGO_DB_PORT: ${{ matrix.db_port }}
+        DJANGO_DB_PORT: 5432
         DJANGO_DB_USER: django
         DJANGO_DB_PASSWORD: django
       run: |
