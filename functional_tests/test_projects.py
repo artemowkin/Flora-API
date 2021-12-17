@@ -33,3 +33,17 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			'user': self.user.username,
 			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'
 		}])
+
+	def test_pagination(self):
+		for i in range(21):
+			Project.objects.create(
+				title=f'some project {i}', description='some description',
+				category=self.category, user=self.user
+			)
+
+		response = self.client.get('/api/v1/projects/?page=1')
+		json = response.json()
+		self.assertEqual(len(json), 20)
+		response = self.client.get('/api/v1/projects/?page=2')
+		json = response.json()
+		self.assertEqual(len(json), 2)
