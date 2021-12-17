@@ -1,0 +1,5 @@
+openapi: 3.0.2
+info:
+  title: 'Flora API'
+  version: '1.0.0'
+paths: {}
