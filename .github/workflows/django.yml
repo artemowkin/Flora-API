@@ -40,4 +40,4 @@ jobs:
         DJANGO_DB_USER: django
         DJANGO_DB_PASSWORD: django
       run: |
-        python manage.py test
+        python manage.py test functional_tests categories projects
