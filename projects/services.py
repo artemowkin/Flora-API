@@ -3,6 +3,7 @@ from django.db.models import QuerySet
 from django.core.exceptions import PermissionDenied
 
 from .models import Project
+from categories.models import Category
 
 
 User = get_user_model()
@@ -18,6 +19,24 @@ class GetProjectsService:
 		"""Return all projects entries"""
 		all_projects = self._model.objects.all()
 		return all_projects
+
+
+class CreateProjectService:
+	"""Service to create a new project entry"""
+
+	def __init__(self, user: User) -> None:
+		if not user.is_staff: raise PermissionDenied
+		self._user = user
+		self._model = Project
+
+	def create(self, title: str, description: str,
+			category: Category) -> Project:
+		"""Create a new project entry with title, description, and category"""
+		project = self._model.objects.create(
+			title=title, description=description, category=category,
+			user=self._user
+		)
+		return project
 
 
 class ProjectCRUDFacade:
