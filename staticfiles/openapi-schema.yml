@@ -13,7 +13,7 @@ paths:
         required: false
         description: page number (only 20 projects on page)
         schema:
-          type: string
+          type: number
       responses:
         '200':
           content:
