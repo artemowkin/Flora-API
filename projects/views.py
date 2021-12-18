@@ -7,7 +7,14 @@ from .serializers import ProjectSerializer
 from categories.services import GetCategoriesService
 
 
-class AllCreateProjectsView(APIView):
+class BaseProjectView(APIView):
+
+	def dispatch(self, request, *args, **kwargs):
+		self.project_crud = ProjectCRUDFacade(request.user)
+		return super().dispatch(request, *args, **kwargs)
+
+
+class AllCreateProjectsView(BaseProjectView):
 
 	def dispatch(self, request, *args, **kwargs):
 		self.project_crud = ProjectCRUDFacade(request.user)
@@ -49,3 +56,15 @@ class AllCreateProjectsView(APIView):
 		)
 		self.request.data.update({'category': category})
 		return self.project_crud.create(**self.request.data)
+
+
+class ConcreteProjectView(BaseProjectView):
+
+	def dispatch(self, request, *args, **kwargs):
+		self.project_crud = ProjectCRUDFacade(request.user)
+		return super().dispatch(request, *args, **kwargs)
+
+	def get(self, request, pk):
+		project = self.project_crud.get_concrete(pk)
+		serialized_project = ProjectSerializer(project).data
+		return Response(serialized_project)

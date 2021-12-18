@@ -103,7 +103,7 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		response = self.client.get(f'/api/v1/projects/{self.project.pk}/')
 		self.assertEqual(response.status_code, 200)
 		json_response = response.json()
-		self.assertEqual(json_response['pk'], self.project.pk)
+		self.assertEqual(json_response['pk'], str(self.project.pk))
 		self.assertEqual(json_response['title'], self.project.title)
 		self.assertEqual(json_response['description'], self.project.description)
 		self.assertEqual(json_response['user'], self.user.username)
