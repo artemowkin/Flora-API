@@ -24,9 +24,9 @@ class GetProjectsService:
 		all_projects = self._model.objects.all()
 		return all_projects
 
-	def get_concrete(self, pk: Union[UUID,str]) -> Project:
+	def get_concrete(self, project_pk: Union[UUID,str]) -> Project:
 		"""Return a concrete project by pk"""
-		concrete_project = get_object_or_404(self._model, pk=pk)
+		concrete_project = get_object_or_404(self._model, pk=project_pk)
 		return concrete_project
 
 
@@ -58,6 +58,10 @@ class ProjectCRUDFacade:
 	def get_all(self) -> QuerySet:
 		"""Return all projects entries"""
 		return self._get_projects_service.get_all()
+
+	def get_concrete(self, project_pk: Union[UUID,str]) -> Project:
+		"""Return a concrete project"""
+		return self._get_projects_service.get_concrete(project_pk)
 
 	def create(self, title: str, description: str,
 			category: Category) -> Project:
