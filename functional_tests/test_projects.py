@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from categories.models import Category
-from projects.models import Project, Project
+from projects.models import Project, ProjectImage
 
 
 User = get_user_model()
@@ -19,6 +19,9 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			title='some project', description='some description',
 			category=self.category, user=self.user
 		)
+		self.project_image = ProjectImage.objects.create(
+			image='some_image.jpg', project=self.project
+		)
 
 	def test_get_all_projects(self):
 		response = self.client.get('/api/v1/projects/')
@@ -28,7 +31,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			'pk': str(self.project.pk),
 			'title': self.project.title,
 			'description': self.project.description,
-			'images': [],
+			'images': ['/media/some_image.jpg'],
 			'category': str(self.category.pk),
 			'user': self.user.username,
 			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'

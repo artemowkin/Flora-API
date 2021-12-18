@@ -1,21 +1,25 @@
 from rest_framework import serializers
+from django.conf import settings
 
 from .models import Project, ProjectImage
 
 
-class ProjectImageSerializer(serializers.ModelSerializer):
-	"""Serializer for project image"""
+class ImagesField(serializers.Field):
+	"""Field with many project images"""
 
-	class Meta:
-		model = ProjectImage
-		fields = ('image',)
+	def to_representation(self, images):
+		images_urls = [
+			settings.MEDIA_URL + image_path[0]
+			for image_path in images.values_list('image')
+		]
+		return images_urls
 
 
 class ProjectSerializer(serializers.ModelSerializer):
 	"""Serializer for project"""
 
 	user = serializers.CharField(source='user.username', read_only=True)
-	images = ProjectImageSerializer(read_only=True, many=True)
+	images = ImagesField(read_only=True)
 
 	class Meta:
 		model = Project
