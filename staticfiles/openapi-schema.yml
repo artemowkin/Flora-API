@@ -48,9 +48,9 @@ components:
             minLength: 1
         category:
           type: string
-          example: "c840ad15-0760-4e05-b510-31c71d49da3b"
-          minLength: 36
-          maxLength: 36
+          example: "Some category"
+          minLength: 1
+          maxLength: 255
         user:
           type: string
           example: "user"
