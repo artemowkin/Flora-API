@@ -31,7 +31,7 @@ class ProjectSerializerTestCase(TestCase):
 			'title': self.project.title,
 			'description': self.project.description,
 			'images': ['/media/some_image.jpg'],
-			'category': self.category.pk,
+			'category': self.category.title,
 			'user': self.user.username,
 			'pub_datetime': project_pub_datetime,
 		}

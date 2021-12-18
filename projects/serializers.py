@@ -2,6 +2,17 @@ from rest_framework import serializers
 from django.conf import settings
 
 from .models import Project, ProjectImage
+from categories.models import Category
+
+
+class CategoryField(serializers.Field):
+	"""Field with category of project"""
+
+	def to_representation(self, category):
+		return str(category.title)
+
+	def to_internal_value(self, category_pk):
+		return Category.objects.get(pk=category_pk)
 
 
 class ImagesField(serializers.Field):
@@ -20,6 +31,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 	user = serializers.CharField(source='user.username', read_only=True)
 	images = ImagesField(read_only=True)
+	category = CategoryField()
 
 	class Meta:
 		model = Project

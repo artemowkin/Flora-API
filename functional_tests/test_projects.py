@@ -32,7 +32,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			'title': self.project.title,
 			'description': self.project.description,
 			'images': ['/media/some_image.jpg'],
-			'category': str(self.category.pk),
+			'category': self.category.title,
 			'user': self.user.username,
 			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'
 		}])
