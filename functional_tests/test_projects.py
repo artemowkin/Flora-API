@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from categories.models import Category
 from projects.models import Project, ProjectImage
@@ -50,3 +51,34 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		response = self.client.get('/api/v1/projects/?page=2')
 		json = response.json()
 		self.assertEqual(len(json), 2)
+
+	def test_create_with_not_authenticated_user(self):
+		response = self._post_project()
+		self.assertEqual(response.status_code, 403)
+
+	def _post_project(self):
+		return self.client.post(reverse('all_create_projects'), {
+			'title': 'new project', 'description': 'some description',
+			'category': self.category.pk
+		}, content_type="application/json")
+
+	def test_create_with_simple_user(self):
+		simple_user = User.objects.create_user(
+			username='simpleuser', password='testpass'
+		)
+		self.client.login(username='simpleuser', password='testpass')
+		response = self._post_project()
+		self.assertEqual(response.status_code, 403)
+
+	def test_create_with_admin_user(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self._post_project()
+		self.assertEqual(response.status_code, 201)
+		json_response = response.json()
+		self.assertIn('pk', json_response)
+		self.assertEqual(json_response['title'], 'new project')
+		self.assertEqual(json_response['description'], 'some description')
+		self.assertEqual(json_response['category'], self.category.title)
+		self.assertEqual(json_response['user'], self.user.username)
+		self.assertEqual(json_response['images'], [])
+		self.assertIn('pub_datetime', json_response)

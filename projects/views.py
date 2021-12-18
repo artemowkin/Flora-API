@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 
 from .services import ProjectCRUDFacade
 from .serializers import ProjectSerializer
+from categories.services import GetCategoriesService
 
 
 class AllCreateProjectsView(APIView):
@@ -31,3 +32,20 @@ class AllCreateProjectsView(APIView):
 		if not page_number.isdigit() or int(page_number) < 1: return 1
 		if int(page_number) > paginator.num_pages: return paginator.num_pages
 		return int(page_number)
+
+	def post(self, request):
+		serializer = ProjectSerializer(data=request.data)
+		if serializer.is_valid():
+			project = self._create_project()
+			serialized_project = ProjectSerializer(project).data
+			return Response(serialized_project, status=201)
+
+		return Response(serializer.errors, status=400)
+
+	def _create_project(self):
+		get_categories_service = GetCategoriesService()
+		category = get_categories_service.get_concrete(
+			self.request.data['category']
+		)
+		self.request.data.update({'category': category})
+		return self.project_crud.create(**self.request.data)
