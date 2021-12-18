@@ -2,15 +2,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 
-from .services import GetProjectsService
+from .services import ProjectCRUDFacade
 from .serializers import ProjectSerializer
 
 
 class AllCreateProjectsView(APIView):
 
+	def dispatch(self, request, *args, **kwargs):
+		self.project_crud = ProjectCRUDFacade(request.user)
+		return super().dispatch(request, *args, **kwargs)
+
 	def get(self, request):
-		get_projects_service = GetProjectsService()
-		all_projects = get_projects_service.get_all()
+		all_projects = self.project_crud.get_all()
 		paginated_projects = self._paginate_projects(all_projects)
 		serialized_projects = ProjectSerializer(
 			paginated_projects, many=True
