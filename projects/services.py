@@ -1,6 +1,10 @@
+from uuid import UUID
+from typing import Union
+
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 
 from .models import Project
 from categories.models import Category
@@ -19,6 +23,11 @@ class GetProjectsService:
 		"""Return all projects entries"""
 		all_projects = self._model.objects.all()
 		return all_projects
+
+	def get_concrete(self, pk: Union[UUID,str]) -> Project:
+		"""Return a concrete project by pk"""
+		concrete_project = get_object_or_404(self._model, pk=pk)
+		return concrete_project
 
 
 class CreateProjectService:

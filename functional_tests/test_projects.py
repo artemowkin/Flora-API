@@ -57,7 +57,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		self.assertEqual(response.status_code, 403)
 
 	def _post_project(self):
-		return self.client.post(reverse('all_create_projects'), {
+		return self.client.post('/api/v1/projects/', {
 			'title': 'new project', 'description': 'some description',
 			'category': self.category.pk
 		}, content_type="application/json")
@@ -82,3 +82,30 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		self.assertEqual(json_response['user'], self.user.username)
 		self.assertEqual(json_response['images'], [])
 		self.assertIn('pub_datetime', json_response)
+
+
+class ConcreteProjectEndpointsTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+		self.project_image = ProjectImage.objects.create(
+			image='some_image.jpg', project=self.project
+		)
+
+	def test_get_concrete_project(self):
+		response = self.client.get(f'/api/v1/projects/{self.project.pk}/')
+		self.assertEqual(response.status_code, 200)
+		json_response = response.json()
+		self.assertEqual(json_response['pk'], self.project.pk)
+		self.assertEqual(json_response['title'], self.project.title)
+		self.assertEqual(json_response['description'], self.project.description)
+		self.assertEqual(json_response['user'], self.user.username)
+		self.assertEqual(json_response['category'], self.category.title)
+		self.assertEqual(json_response['images'], ['/media/some_image.jpg'])

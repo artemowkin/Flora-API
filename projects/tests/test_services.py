@@ -1,9 +1,10 @@
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 
 from ..services import GetProjectsService, CreateProjectService
 from ..models import Project
@@ -30,6 +31,16 @@ class GetProjectsServiceTestCase(TestCase):
 		all_projects = service.get_all()
 		self.assertEqual(all_projects.count(), 1)
 		self.assertEqual(all_projects[0], self.project)
+
+	def test_get_concrete(self):
+		service = GetProjectsService()
+		concrete_project = service.get_concrete(self.project.pk)
+		self.assertEqual(concrete_project, self.project)
+
+	def test_get_concrete_with_unexisting_pk(self):
+		service = GetProjectsService()
+		with self.assertRaises(Http404):
+			service.get_concrete(uuid4())
 
 
 class CreateProjectServiceTestCase(TestCase):
