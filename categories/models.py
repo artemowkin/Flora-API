@@ -7,7 +7,7 @@ class Category(models.Model):
 	"""Project category model"""
 
 	uuid = models.UUIDField(primary_key=True, editable=False, default=uuid4)
-	title = models.CharField('category title', max_length=255)
+	title = models.CharField('category title', max_length=255, unique=True)
 
 	class Meta:
 		db_table = 'categories'
