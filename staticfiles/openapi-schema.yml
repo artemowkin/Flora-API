@@ -20,6 +20,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListProjects'
+    post:
+      operationId: createProject
+      description: Create a new project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: "Some project"
+                description:
+                  type: string
+                  minlength: 1
+                  example: "Some description"
+                category:
+                  type: string
+                  format: uuid
+                  minLength: 36
+                  maxLength: 36
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: array
+                    items:
+                      type: string
+                      example: "This field may not be blank."
+                  description:
+                    type: array
+                    items:
+                      type: string
+                      example: "This field may not be blank."
+                  category:
+                    type: array
+                    items:
+                      type: string
+                      example: "This field may not be blank."
 
 components:
   schemas:
@@ -28,7 +78,7 @@ components:
       properties:
         pk:
           type: string
-          example: "c840ad15-0760-4e05-b510-31c71d49da3b"
+          format: uuid
           minLength: 36
           maxLength: 36
         title:
