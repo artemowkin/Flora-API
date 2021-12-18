@@ -49,3 +49,9 @@ class ProjectCRUDFacade:
 	def get_all(self) -> QuerySet:
 		"""Return all projects entries"""
 		return self._get_projects_service.get_all()
+
+	def create(self, title: str, description: str,
+			category: Category) -> Project:
+		"""Create a new project"""
+		create_project_service = CreateProjectService(self._user)
+		return create_project_service.create(title, description, category)
