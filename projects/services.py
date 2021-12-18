@@ -18,3 +18,15 @@ class GetProjectsService:
 		"""Return all projects entries"""
 		all_projects = self._model.objects.all()
 		return all_projects
+
+
+class ProjectCRUDFacade:
+	"""Facade with CRUD functionality for project"""
+
+	def __init__(self, user: User) -> None:
+		self._user = user
+		self._get_projects_service = GetProjectsService()
+
+	def get_all(self) -> QuerySet:
+		"""Return all projects entries"""
+		return self._get_projects_service.get_all()
