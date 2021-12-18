@@ -70,6 +70,24 @@ paths:
                     items:
                       type: string
                       example: "This field may not be blank."
+  /api/v1/projects/{project_pk}/:
+    get:
+      operationId: concreteProject
+      description: The concrete project
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
 
 components:
   schemas:
