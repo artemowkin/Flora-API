@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.conf import settings
 
 from .models import Project, ProjectImage
-from categories.models import Category
+from categories.services import GetCategoriesService
 
 
 class CategoryField(serializers.Field):
@@ -12,7 +12,8 @@ class CategoryField(serializers.Field):
 		return str(category.title)
 
 	def to_internal_value(self, category_pk):
-		return Category.objects.get(pk=category_pk)
+		service = GetCategoriesService()
+		return service.get_concrete(category_pk)
 
 
 class ImagesField(serializers.Field):
