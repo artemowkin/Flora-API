@@ -43,12 +43,9 @@ components:
         images:
           type: array
           items:
-            type: object
-            properties:
-              image:
-                type: string
-                example: "/media/projects/some_image.png"
-                minLength: 1
+            type: string
+            example: "/media/projects/some_image.png"
+            minLength: 1
         category:
           type: string
           example: "c840ad15-0760-4e05-b510-31c71d49da3b"
