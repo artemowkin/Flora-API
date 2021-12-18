@@ -18,5 +18,5 @@ class CategorySerializerTestCase(TestCase):
 		self.assertEqual(serialized_category, self.category_data)
 
 	def test_is_data_valid(self):
-		serializer = CategorySerializer(data=self.category_data)
+		serializer = CategorySerializer(data={'title': 'second category'})
 		self.assertTrue(serializer.is_valid())
