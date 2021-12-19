@@ -91,6 +91,6 @@ class ProjectCRUDFacade:
 		"""Update a concrete project"""
 		update_project_service = UpdateProjectService(self._user)
 		concrete_project = self._get_projects_service.get_concrete(project_pk)
-		return update_project_service(
+		return update_project_service.update(
 			concrete_project, title, description, category
 		)

@@ -47,3 +47,13 @@ class ConcreteProjectViewTestCase(TestCase):
 			'concrete_project', args=[str(self.project.pk)]
 		))
 		self.assertEqual(response.status_code, 200)
+
+	def test_put(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.put(
+			reverse('concrete_project', args=[str(self.project.pk)]), {
+				'title': 'new title', 'description': 'new description',
+				'category': self.category.pk
+			}, content_type="application/json"
+		)
+		self.assertEqual(response.status_code, 200)

@@ -111,12 +111,13 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		self.assertEqual(json_response['images'], ['/media/some_image.jpg'])
 
 	def test_update_concrete_project(self):
-		response = sefl.client.put(f'/api/v1/projects/{self.project.pk}/', {
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.put(f'/api/v1/projects/{self.project.pk}/', {
 			'title': 'new title', 'description': 'new description',
 			'category': self.category.pk
 		}, content_type='application/json')
-		self.assertEqual(response, 200)
-		json_resposne = response.json()
+		self.assertEqual(response.status_code, 200)
+		json_response = response.json()
 		self.assertEqual(json_response['pk'], str(self.project.pk))
 		self.assertEqual(json_response['title'], 'new title')
 		self.assertEqual(json_response['description'], 'new description')
