@@ -51,6 +51,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+        '403':
+          description: You are not authenticated
         '400':
           description: Error with fields values
           content:
@@ -124,6 +126,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+        '403':
+          description: You are not authenticated
         '400':
           description: Error with fields values
           content:
@@ -152,6 +156,8 @@ paths:
       operationId: deleteProject
       description: Delete an existing project
       responses:
+        '403':
+          description: You are not authenticated
         '204':
           description: Successfully deleted
       tags:
