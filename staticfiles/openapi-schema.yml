@@ -212,6 +212,18 @@ paths:
           description: You are not authenticated
       tags:
       - projects
+  /api/v1/projects/pinned/:
+    get:
+      operationId: pinnedProjects
+      description: All pinned projects
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProjects'
+      tags:
+      - projects
 
 components:
   schemas:
