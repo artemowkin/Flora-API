@@ -33,6 +33,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			'title': self.project.title,
 			'description': self.project.description,
 			'images': ['/media/some_image.jpg'],
+			'pinned': False,
 			'category': {
 				'pk': str(self.category.pk),
 				'title': self.category.title,
@@ -137,3 +138,27 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		response = self.client.delete(f'/api/v1/projects/{self.project.pk}/')
 		self.assertEqual(response.status_code, 204)
 		self.assertEqual(Project.objects.count(), 0)
+
+
+class PinnedProjectsEndpointTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_get_pinned_projects(self):
+		new_project = Project.objects.create(
+			title='new project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+		response = self.client.get('/api/v1/projects/pinned/')
+		self.assertEqual(response.status_code, 200)
+		json_response = response.json()
+		self.assertEqual(len(json_response), 1)
+		self.assertEqual(json_response[0]['title'], 'new project')

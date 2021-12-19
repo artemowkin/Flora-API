@@ -13,4 +13,5 @@ urlpatterns = [
 		'<uuid:pk>/upload_images/', views.ProjectImagesUploadView.as_view(),
 		name='upload_project_images'
 	),
+	path('pinned/', views.PinnedProjectsView.as_view(), name='pinned_projects'),
 ]

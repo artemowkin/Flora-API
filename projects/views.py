@@ -4,7 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 
-from .services import ProjectCRUDFacade, add_project_images
+from .services import (
+	ProjectCRUDFacade, add_project_images, GetProjectsService
+)
 from .serializers import ProjectSerializer
 from categories.services import GetCategoriesService
 
@@ -101,3 +103,12 @@ class ProjectImagesUploadView(BaseProjectView):
 		images = [image for image in request.data.values()]
 		add_project_images(project, images)
 		return Response(status=204)
+
+
+class PinnedProjectsView(APIView):
+
+	def get(self, request):
+		get_service = GetProjectsService()
+		pinned_projects = get_service.get_pinned()
+		serialized_projects = ProjectSerializer(pinned_projects, many=True).data
+		return Response(serialized_projects, status=200)

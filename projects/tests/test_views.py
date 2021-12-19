@@ -64,3 +64,10 @@ class ConcreteProjectViewTestCase(TestCase):
 			reverse('concrete_project', args=[str(self.project.pk)])
 		)
 		self.assertEqual(response.status_code, 204)
+
+
+class PinnedProjectsViewTestCase(TestCase):
+
+	def test_get(self):
+		response = self.client.get(reverse('pinned_projects'))
+		self.assertEqual(response.status_code, 200)
