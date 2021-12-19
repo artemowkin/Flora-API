@@ -46,6 +46,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'floraapi.permissions.IsAdminOrReadOnly'
+    ]
+}
+
 ROOT_URLCONF = 'floraapi.urls'
 
 TEMPLATES = [
