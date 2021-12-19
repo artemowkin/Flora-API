@@ -45,6 +45,16 @@ class GetProjectsServiceTestCase(TestCase):
 		with self.assertRaises(Http404):
 			service.get_concrete(uuid4())
 
+	def test_get_pinned(self):
+		new_project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+		service = GetProjectsService()
+		pinned_projects = service.get_pinned()
+		self.assertEqual(pinned_projects.count(), 1)
+		self.assertEqual(pinned_projects[0], new_project)
+
 
 class CreateProjectServiceTestCase(TestCase):
 

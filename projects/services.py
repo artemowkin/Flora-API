@@ -29,6 +29,11 @@ class GetProjectsService:
 		concrete_project = get_object_or_404(self._model, pk=project_pk)
 		return concrete_project
 
+	def get_pinned(self) -> QuerySet:
+		"""Get pinned projects"""
+		pinned_projects = self._model.objects.filter(pinned=True)
+		return pinned_projects
+
 
 class BaseConcreteProjectService:
 	"""Base service with concrete project logic"""
