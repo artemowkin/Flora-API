@@ -31,7 +31,7 @@ class GetProjectsService:
 
 	def get_pinned(self) -> QuerySet:
 		"""Get pinned projects"""
-		pinned_projects = self._model.objects.filter(pinned=True)
+		pinned_projects = self._model.objects.filter(pinned=True)[:20:1]
 		return pinned_projects
 
 

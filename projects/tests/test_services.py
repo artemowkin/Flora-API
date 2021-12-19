@@ -52,8 +52,19 @@ class GetProjectsServiceTestCase(TestCase):
 		)
 		service = GetProjectsService()
 		pinned_projects = service.get_pinned()
-		self.assertEqual(pinned_projects.count(), 1)
+		self.assertEqual(len(pinned_projects), 1)
 		self.assertEqual(pinned_projects[0], new_project)
+
+	def test_get_pinned_with_more_than_20_pinned_projects(self):
+		for i in range(21):
+			Project.objects.create(
+				title=f'new project{i}', description='some description',
+				category=self.category, user=self.user, pinned=True
+			)
+
+		service = GetProjectsService()
+		pinned_projects = service.get_pinned()
+		self.assertEqual(len(pinned_projects), 20)
 
 
 class CreateProjectServiceTestCase(TestCase):
