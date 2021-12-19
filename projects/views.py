@@ -1,8 +1,10 @@
+from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 
-from .services import ProjectCRUDFacade
+from .services import ProjectCRUDFacade, add_project_images
 from .serializers import ProjectSerializer
 from categories.services import GetCategoriesService
 
@@ -88,4 +90,14 @@ class ConcreteProjectView(BaseProjectView):
 
 	def delete(self, request, pk):
 		self.project_crud.delete(pk)
+		return Response(status=204)
+
+
+class ProjectImagesUploadView(BaseProjectView):
+	parser_classes = [MultiPartParser]
+
+	def post(self, request, pk):
+		project = self.project_crud.get_concrete(pk)
+		images = [image for image in request.data.values()]
+		add_project_images(project, images)
 		return Response(status=204)

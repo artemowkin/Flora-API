@@ -6,7 +6,7 @@ from django.db.models import QuerySet
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
-from .models import Project
+from .models import Project, ProjectImage
 from categories.models import Category
 
 
@@ -108,3 +108,9 @@ class ProjectCRUDFacade:
 		concrete_project = self._get_projects_service.get_concrete(project_pk)
 		delete_service = DeleteProjectService(self._user)
 		delete_service.delete(concrete_project)
+
+
+def add_project_images(project: Project, images: list) -> None:
+	"""Add images for project"""
+	for image in images:
+		ProjectImage.objects.create(project=project, image=image)
