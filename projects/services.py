@@ -85,3 +85,12 @@ class ProjectCRUDFacade:
 		"""Create a new project"""
 		create_project_service = CreateProjectService(self._user)
 		return create_project_service.create(title, description, category)
+
+	def update(self, project_pk: Union[UUID,str], title: str,
+			description: str, category: Category) -> Project:
+		"""Update a concrete project"""
+		update_project_service = UpdateProjectService(self._user)
+		concrete_project = self._get_projects_service.get_concrete(project_pk)
+		return update_project_service(
+			concrete_project, title, description, category
+		)
