@@ -100,6 +100,14 @@ paths:
     put:
       operationId: updateProject
       description: Update an existing project
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
       requestBody:
         content:
           application/json:
@@ -155,11 +163,53 @@ paths:
     delete:
       operationId: deleteProject
       description: Delete an existing project
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
       responses:
         '403':
           description: You are not authenticated
         '204':
           description: Successfully deleted
+      tags:
+      - projects
+  /api/v1/projects/{project_pk}/upload_images/:
+    post:
+      operationId: uploadProjectImages
+      description: Upload project images
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image1:
+                  type: string
+                  format: binary
+                image2:
+                  type: string
+                  format: binary
+                imageN:
+                  type: string
+                  format: binary
+      responses:
+        '204':
+          description: Successfully added images
+        '403':
+          description: You are not authenticated
       tags:
       - projects
 
