@@ -165,10 +165,18 @@ components:
             example: "/media/projects/some_image.png"
             minLength: 1
         category:
-          type: string
-          example: "Some category"
-          minLength: 1
-          maxLength: 255
+          type: object
+          properties:
+            pk:
+              type: string
+              format: uuid
+              minLength: 36
+              maxLength: 36
+            title:
+              type: string
+              example: "Some category"
+              minLength: 1
+              maxLength: 255
         user:
           type: string
           example: "user"

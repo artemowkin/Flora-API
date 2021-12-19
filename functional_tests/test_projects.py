@@ -33,7 +33,10 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 			'title': self.project.title,
 			'description': self.project.description,
 			'images': ['/media/some_image.jpg'],
-			'category': self.category.title,
+			'category': {
+				'pk': str(self.category.pk),
+				'title': self.category.title,
+			},
 			'user': self.user.username,
 			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'
 		}])
@@ -78,7 +81,9 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		self.assertIn('pk', json_response)
 		self.assertEqual(json_response['title'], 'new project')
 		self.assertEqual(json_response['description'], 'some description')
-		self.assertEqual(json_response['category'], self.category.title)
+		self.assertEqual(
+			json_response['category']['title'], self.category.title
+		)
 		self.assertEqual(json_response['user'], self.user.username)
 		self.assertEqual(json_response['images'], [])
 		self.assertIn('pub_datetime', json_response)
@@ -107,7 +112,9 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		self.assertEqual(json_response['title'], self.project.title)
 		self.assertEqual(json_response['description'], self.project.description)
 		self.assertEqual(json_response['user'], self.user.username)
-		self.assertEqual(json_response['category'], self.category.title)
+		self.assertEqual(
+			json_response['category']['title'], self.category.title
+		)
 		self.assertEqual(json_response['images'], ['/media/some_image.jpg'])
 
 	def test_update_concrete_project(self):
@@ -121,4 +128,6 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		self.assertEqual(json_response['pk'], str(self.project.pk))
 		self.assertEqual(json_response['title'], 'new title')
 		self.assertEqual(json_response['description'], 'new description')
-		self.assertEqual(json_response['category'], self.category.title)
+		self.assertEqual(
+			json_response['category']['title'], self.category.title
+		)

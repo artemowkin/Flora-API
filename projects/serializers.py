@@ -9,7 +9,7 @@ class CategoryField(serializers.Field):
 	"""Field with category of project"""
 
 	def to_representation(self, category):
-		return str(category.title)
+		return {'pk': str(category.pk), 'title': category.title}
 
 	def to_internal_value(self, category_pk):
 		service = GetCategoriesService()
