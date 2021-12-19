@@ -102,3 +102,9 @@ class ProjectCRUDFacade:
 		return update_project_service.update(
 			concrete_project, title, description, category
 		)
+
+	def delete(self, project_pk: Union[UUID,str]) -> None:
+		"""Delete a concrete project by pk"""
+		concrete_project = self._get_projects_service.get_concrete(project_pk)
+		delete_service = DeleteProjectService(self._user)
+		delete_service.delete(concrete_project)
