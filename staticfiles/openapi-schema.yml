@@ -20,6 +20,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListProjects'
+      tags:
+      - projects
     post:
       operationId: createProject
       description: Create a new project
@@ -50,6 +52,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
         '400':
+          description: Error with fields values
           content:
             application/json:
               schema:
@@ -70,6 +73,8 @@ paths:
                     items:
                       type: string
                       example: "This field may not be blank."
+      tags:
+      - projects
   /api/v1/projects/{project_pk}/:
     get:
       operationId: concreteProject
@@ -88,6 +93,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+      tags:
+      - projects
     put:
       operationId: updateProject
       description: Update an existing project
@@ -118,6 +125,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
         '400':
+          description: Error with fields values
           content:
             application/json:
               schema:
@@ -138,6 +146,16 @@ paths:
                     items:
                       type: string
                       example: "This field may not be blank."
+      tags:
+      - projects
+    delete:
+      operationId: deleteProject
+      description: Delete an existing project
+      responses:
+        '204':
+          description: Successfully deleted
+      tags:
+      - projects
 
 components:
   schemas:
