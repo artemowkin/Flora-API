@@ -30,13 +30,17 @@ class GetProjectsService:
 		return concrete_project
 
 
-class CreateProjectService:
-	"""Service to create a new project entry"""
+class BaseConcreteProjectService:
+	"""Base service with concrete project logic"""
 
 	def __init__(self, user: User) -> None:
 		if not user.is_staff: raise PermissionDenied
 		self._user = user
 		self._model = Project
+
+
+class CreateProjectService(BaseConcreteProjectService):
+	"""Service to create a new project entry"""
 
 	def create(self, title: str, description: str,
 			category: Category) -> Project:
@@ -45,6 +49,19 @@ class CreateProjectService:
 			title=title, description=description, category=category,
 			user=self._user
 		)
+		return project
+
+
+class UpdateProjectService(BaseConcreteProjectService):
+	"""Service to update a concrete project"""
+
+	def update(self, project: Project, title: str, description: str,
+			category: Category) -> Project:
+		"""Update a concrete project"""
+		project.title = title
+		project.description = description
+		project.category = category
+		project.save()
 		return project
 
 

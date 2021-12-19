@@ -6,7 +6,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
-from ..services import GetProjectsService, CreateProjectService
+from ..services import (
+	GetProjectsService, CreateProjectService, UpdateProjectService
+)
 from ..models import Project
 from categories.models import Category
 
@@ -73,3 +75,39 @@ class CreateProjectServiceTestCase(TestCase):
 		)
 		with self.assertRaises(PermissionDenied):
 			CreateProjectService(simple_user)
+
+
+class UpdateProjectServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_update(self):
+		service = UpdateProjectService(self.user)
+		new_category = Category.objects.create(title='new category')
+		project = service.update(
+			self.project, 'New title', 'New description', new_category
+		)
+		self.assertEqual(project.pk, self.project.pk)
+		self.assertEqual(project.title, 'New title')
+		self.assertEqual(project.description, 'New description')
+		self.assertEqual(project.category, new_category)
+		self.assertEqual(project.user, self.user)
+
+	def test_update_with_not_authenticated_user(self):
+		with self.assertRaises(PermissionDenied):
+			UpdateProjectService(AnonymousUser())
+
+	def test_update_with_simple_user(self):
+		simple_user = User.objects.create_user(
+			username='someuser', password='somepass'
+		)
+		with self.assertRaises(PermissionDenied):
+			UpdateProjectService(simple_user)
