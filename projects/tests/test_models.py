@@ -30,6 +30,7 @@ class ProjectModelTestCase(BaseProjectModelTestCase):
 		self.assertIsInstance(self.project.pk, UUID)
 		self.assertEqual(self.project.title, 'Some project')
 		self.assertEqual(self.project.description, 'Some description')
+		self.assertFalse(self.project.pinned)
 		self.assertEqual(self.project.category, self.category)
 		self.assertEqual(self.project.user, self.user)
 		self.assertEqual(self.project.pub_datetime.date(), date.today())

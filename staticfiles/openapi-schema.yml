@@ -238,6 +238,8 @@ components:
             type: string
             example: "/media/projects/some_image.png"
             minLength: 1
+        pinned:
+          type: boolean
         category:
           type: object
           properties:

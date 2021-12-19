@@ -31,6 +31,7 @@ class ProjectSerializerTestCase(TestCase):
 			'title': self.project.title,
 			'description': self.project.description,
 			'images': ['/media/some_image.jpg'],
+			'pinned': False,
 			'category': {
 				'pk': str(self.category.pk),
 				'title': self.category.title

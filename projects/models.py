@@ -15,6 +15,7 @@ class Project(models.Model):
 	uuid = models.UUIDField(primary_key=True, editable=False, default=uuid4)
 	title = models.CharField('project title', max_length=255)
 	description = models.TextField('project description')
+	pinned = models.BooleanField('is project pinned', default=False)
 	category = models.ForeignKey(
 		Category, on_delete=models.CASCADE, verbose_name='project category',
 		related_name='projects'
