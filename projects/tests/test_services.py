@@ -7,7 +7,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
 from ..services import (
-	GetProjectsService, CreateProjectService, UpdateProjectService
+	GetProjectsService, CreateProjectService, UpdateProjectService,
+	DeleteProjectService
 )
 from ..models import Project
 from categories.models import Category
@@ -111,3 +112,32 @@ class UpdateProjectServiceTestCase(TestCase):
 		)
 		with self.assertRaises(PermissionDenied):
 			UpdateProjectService(simple_user)
+
+
+class DeleteProjectServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_delete(self):
+		service = DeleteProjectService(self.user)
+		service.delete(self.project)
+		self.assertEqual(Project.objects.count(), 0)
+
+	def test_delete_with_not_authenticated_user(self):
+		with self.assertRaises(PermissionDenied):
+			DeleteProjectService(AnonymousUser())
+
+	def test_delete_with_simple_user(self):
+		simple_user = User.objects.create_user(
+			username='someuser', password='someuser'
+		)
+		with self.assertRaises(PermissionDenied):
+			DeleteProjectService(simple_user)

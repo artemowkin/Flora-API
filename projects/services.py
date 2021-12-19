@@ -65,6 +65,14 @@ class UpdateProjectService(BaseConcreteProjectService):
 		return project
 
 
+class DeleteProjectService(BaseConcreteProjectService):
+	"""Service to delete a concrete project"""
+
+	def delete(self, project: Project) -> None:
+		"""Delete a concrete project"""
+		project.delete()
+
+
 class ProjectCRUDFacade:
 	"""Facade with CRUD functionality for project"""
 
