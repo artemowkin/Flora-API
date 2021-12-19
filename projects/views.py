@@ -85,3 +85,7 @@ class ConcreteProjectView(BaseProjectView):
 		)
 		self.request.data.update({'category': category})
 		return self.project_crud.update(pk, **self.request.data)
+
+	def delete(self, request, pk):
+		self.project_crud.delete(pk)
+		return Response(status=204)

@@ -131,3 +131,9 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		self.assertEqual(
 			json_response['category']['title'], self.category.title
 		)
+
+	def test_delete_concrete_project(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.delete(f'/api/v1/projects/{self.project.pk}/')
+		self.assertEqual(response.status_code, 204)
+		self.assertEqual(Project.objects.count(), 0)
