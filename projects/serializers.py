@@ -38,6 +38,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 		model = Project
 		fields = (
 			'pk', 'title', 'description', 'images', 'pinned', 'category',
-			'user', 'pub_datetime'
+			'user', 'views', 'pub_datetime'
 		)
-		read_only_fields = ('pk', 'user', 'images', 'pub_datetime', 'pinned')
+		read_only_fields = (
+			'pk', 'user', 'images', 'pub_datetime', 'pinned', 'views'
+		)

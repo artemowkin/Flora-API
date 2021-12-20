@@ -37,6 +37,7 @@ class ProjectSerializerTestCase(TestCase):
 				'title': self.category.title
 			},
 			'user': self.user.username,
+			'views': 0,
 			'pub_datetime': project_pub_datetime,
 		}
 
