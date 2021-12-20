@@ -1,8 +1,9 @@
+import re
 from uuid import UUID
 from typing import Union
 
 from django.contrib.auth import get_user_model
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
@@ -119,6 +120,64 @@ class ProjectCRUDFacade:
 		"""Delete a concrete project by pk"""
 		delete_service = DeleteProjectService(self._user)
 		delete_service.delete(project_pk)
+
+
+class SearchProjectsService:
+	"""Service to search projects by category and query"""
+
+	def __init__(self):
+		self._model = Project
+
+	def search(self, **kwargs: dict) -> QuerySet:
+		"""Search projects by kwargs"""
+		kwargs = self._normalize_kwargs(kwargs)
+		methods = self._get_kwargs_methods(kwargs)
+		return self._run_chain(methods, kwargs)
+
+	def _normalize_kwargs(self, kwargs: dict) -> dict:
+		"""Make kwargs values not iterable"""
+		if not self._is_kwargs_valid(kwargs):
+			return {key: value[0] for key, value in kwargs.items()}
+
+		return kwargs
+
+	def _is_kwargs_valid(self, kwargs: dict) -> dict:
+		"""Check is kwargs values not iterable"""
+		return not all([
+			isinstance(kwargs[key], list) for key in kwargs
+		])
+
+	def _get_kwargs_methods(self, kwargs: dict) -> list:
+		"""Return list with methods names"""
+		return [key for key in kwargs if hasattr(self, key)]
+
+	def _run_chain(self, methods: list, kwargs: dict) -> QuerySet:
+		"""Calls methods one by one and returns result queryset"""
+		result_queryset = self._model.objects.all()
+		for method_name in methods:
+			method = getattr(self, method_name)
+			result_queryset = method(result_queryset, kwargs[method_name])
+
+		return result_queryset
+
+	def category(self, queryset: QuerySet,
+			category_pk: Union[UUID,str]) -> QuerySet:
+		"""Filter projects by category"""
+		if not self._is_uuid_valid(category_pk): return queryset
+		return queryset.filter(category__pk=category_pk)
+
+	def _is_uuid_valid(self, uuid: Union[UUID,str]) -> bool:
+		"""Check is uuid valid"""
+		if isinstance(uuid, UUID): return True
+		uuid_regexp = r"[a-f0-9]{8}(-[a-f0-9]{4}){4}[a-f0-9]{8}"
+		return re.match(uuid_regexp, uuid)
+
+	def query(self, queryset: QuerySet, query_value: str) -> QuerySet:
+		"""Search projects by query in title and description"""
+		return queryset.filter(
+			Q(title__icontains=query_value) |
+			Q(description__icontains=query_value)
+		)
 
 
 def add_project_images(project: Project, images: list) -> None:

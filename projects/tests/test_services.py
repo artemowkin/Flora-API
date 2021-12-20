@@ -8,7 +8,7 @@ from django.http import Http404
 
 from ..services import (
 	GetProjectsService, CreateProjectService, UpdateProjectService,
-	DeleteProjectService, pin_project, unpin_project
+	DeleteProjectService, pin_project, unpin_project, SearchProjectsService
 )
 from ..models import Project
 from categories.models import Category
@@ -218,3 +218,40 @@ class UnpinProjectServiceTestCase(TestCase):
 		project = Project.objects.get(pk=self.project.pk)
 		self.assertFalse(project.pinned)
 		self.assertEqual(resp, {'unpinned': False})
+
+
+class SearchProjectsServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+
+	def test_search(self):
+		service = SearchProjectsService()
+		projects = service.search(
+			category=[self.category.pk], query=['some project']
+		)
+		self.assertEqual(projects.count(), 1)
+		self.assertEqual(projects[0], self.project)
+
+	def test_search_with_incorrect_parameters(self):
+		service = SearchProjectsService()
+		projects = service.search(parameter=['value'])
+		self.assertEqual(projects.count(), 1)
+		self.assertEqual(projects[0], self.project)
+
+	def test_search_with_not_existing_category(self):
+		service = SearchProjectsService()
+		projects = service.search(category=[uuid4()])
+		self.assertEqual(projects.count(), 0)
+
+	def test_search_with_not_existing_query(self):
+		service = SearchProjectsService()
+		projects = service.search(query='query')
+		self.assertEqual(projects.count(), 0)
