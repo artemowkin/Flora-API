@@ -224,6 +224,29 @@ paths:
                 $ref: '#/components/schemas/ListProjects'
       tags:
       - projects
+  /api/v1/projects/{project_pk}/pin/:
+    post:
+      operationId: pinProject
+      description: Mark concrete project as pinned
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pinned:
+                    type: boolean
+      tags:
+      - projects
 
 components:
   schemas:
