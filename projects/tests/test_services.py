@@ -116,13 +116,14 @@ class UpdateProjectServiceTestCase(TestCase):
 		service = UpdateProjectService(self.user)
 		new_category = Category.objects.create(title='new category')
 		project = service.update(
-			self.project, 'New title', 'New description', new_category
+			self.project.pk, 'New title', 'New description', new_category
 		)
 		self.assertEqual(project.pk, self.project.pk)
 		self.assertEqual(project.title, 'New title')
 		self.assertEqual(project.description, 'New description')
 		self.assertEqual(project.category, new_category)
 		self.assertEqual(project.user, self.user)
+		self.assertEqual(project.views, 0)
 
 	def test_update_with_not_authenticated_user(self):
 		with self.assertRaises(PermissionDenied):
@@ -150,7 +151,7 @@ class DeleteProjectServiceTestCase(TestCase):
 
 	def test_delete(self):
 		service = DeleteProjectService(self.user)
-		service.delete(self.project)
+		service.delete(self.project.pk)
 		self.assertEqual(Project.objects.count(), 0)
 
 	def test_delete_with_not_authenticated_user(self):

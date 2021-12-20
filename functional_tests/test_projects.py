@@ -134,6 +134,7 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		self.assertEqual(
 			json_response['category']['title'], self.category.title
 		)
+		self.assertEqual(json_response['views'], 0)
 
 	def test_delete_concrete_project(self):
 		self.client.login(username='testuser', password='testpass')

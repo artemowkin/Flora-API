@@ -66,9 +66,10 @@ class CreateProjectService(BaseConcreteProjectService):
 class UpdateProjectService(BaseConcreteProjectService):
 	"""Service to update a concrete project"""
 
-	def update(self, project: Project, title: str, description: str,
+	def update(self, project_pk: Union[UUID,str], title: str, description: str,
 			category: Category) -> Project:
 		"""Update a concrete project"""
+		project = get_object_or_404(self._model, pk=project_pk)
 		project.title = title
 		project.description = description
 		project.category = category
@@ -79,8 +80,9 @@ class UpdateProjectService(BaseConcreteProjectService):
 class DeleteProjectService(BaseConcreteProjectService):
 	"""Service to delete a concrete project"""
 
-	def delete(self, project: Project) -> None:
+	def delete(self, project_pk: Union[UUID,str]) -> None:
 		"""Delete a concrete project"""
+		project = get_object_or_404(self._model, pk=project_pk)
 		project.delete()
 
 
@@ -109,16 +111,14 @@ class ProjectCRUDFacade:
 			description: str, category: Category) -> Project:
 		"""Update a concrete project"""
 		update_project_service = UpdateProjectService(self._user)
-		concrete_project = self._get_projects_service.get_concrete(project_pk)
 		return update_project_service.update(
-			concrete_project, title, description, category
+			project_pk, title, description, category
 		)
 
 	def delete(self, project_pk: Union[UUID,str]) -> None:
 		"""Delete a concrete project by pk"""
-		concrete_project = self._get_projects_service.get_concrete(project_pk)
 		delete_service = DeleteProjectService(self._user)
-		delete_service.delete(concrete_project)
+		delete_service.delete(project_pk)
 
 
 def add_project_images(project: Project, images: list) -> None:
