@@ -3,6 +3,110 @@ info:
   title: 'Flora API'
   version: '1.0.0'
 paths:
+  /api/v1/auth/registration/:
+    post:
+      operationId: registration
+      description: "Registration by email/password using JWT token.
+      After getting token you can use `access_token` to get acces to the site.
+      To do it, you need to pass the `access_token` to request header:
+      `Authorization: Token <access_token>;`"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@gmail.com
+                password1:
+                  type: string
+                  example: password
+                password2:
+                  type: string
+                  example: password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+      tags:
+      - authentication
+  /api/v1/auth/login/:
+    post:
+      operationId: login
+      description: "Login using JWT token.
+      After getting token you can use `access_token` to get acces to the site.
+      To do it, you need to pass the `access_token` to request header:
+      `Authorization: Token <access_token>;`"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: example@gmail.com
+                password:
+                  type: string
+                  example: password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+      tags:
+      - authentication
+  /api/v1/auth/logout/:
+    post:
+      operationId: logout
+      description: Logout from current account
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: Successfully logged out.
+      tags:
+      - authentication
+  /api/v1/auth/user/:
+    get:
+      operationId: concreteUser
+      description: Current user information
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pk:
+                    type: number
+                    format: integer
+                  username:
+                    type: string
+                    example: username
+                  email:
+                    type: string
+                    format: email
+                    example: username@gmail.com
+                  first_name:
+                    type: string
+                    example: ""
+                  second_name:
+                    type: string
+                    example: ""
+      tags:
+      - authentication
   /api/v1/projects/?page=n:
     get:
       operationId: allProjects
@@ -299,6 +403,36 @@ paths:
 
 components:
   schemas:
+    Token:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: token using to get access
+          example: "<jwt_token>"
+        refresh_token:
+          type: string
+          description: token using to refresh user token
+          example: "<jwt_token>"
+        user:
+          type: object
+          properties:
+            pk:
+              type: number
+              format: integer
+            username:
+              type: string
+              example: username
+            email:
+              type: string
+              format: email
+              example: username@gmail.com
+            first_name:
+              type: string
+              example: ""
+            second_name:
+              type: string
+              example: ""
     Project:
       type: object
       properties:
