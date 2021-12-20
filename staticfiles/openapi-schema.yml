@@ -270,6 +270,32 @@ paths:
                     type: boolean
       tags:
       - projects
+  /api/v1/projects/search/?category=&query=:
+    get:
+      operationId: searchProjects
+      description: Search projects by category and query
+      parameters:
+      - name: category
+        in: path
+        required: false
+        description: category pk field
+        schema:
+          type: string
+          format: uuid
+      - name: query
+        in: path
+        required: false
+        description: query value that searching in title and description fields
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProjects'
+      tags:
+      - projects
 
 components:
   schemas:
