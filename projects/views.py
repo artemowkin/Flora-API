@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 
 from .services import (
 	ProjectCRUDFacade, add_project_images, GetProjectsService,
-	pin_project
+	pin_project, unpin_project
 )
 from .serializers import ProjectSerializer
 from categories.services import GetCategoriesService
@@ -119,4 +119,11 @@ class PinProjectView(APIView):
 
 	def post(self, request, pk):
 		resp = pin_project(pk)
+		return Response(resp, status=200)
+
+
+class UnpinProjectView(APIView):
+
+	def post(self, request, pk):
+		resp = unpin_project(pk)
 		return Response(resp, status=200)

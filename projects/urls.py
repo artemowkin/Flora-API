@@ -15,4 +15,8 @@ urlpatterns = [
 	),
 	path('pinned/', views.PinnedProjectsView.as_view(), name='pinned_projects'),
 	path('<uuid:pk>/pin/', views.PinProjectView.as_view(), name='pin_project'),
+	path(
+		'<uuid:pk>/unpin/', views.UnpinProjectView.as_view(),
+		name='unpin_project'
+	),
 ]

@@ -91,3 +91,23 @@ class PinProjectViewTestCase(TestCase):
 			'pin_project', args=[str(self.project.pk)]
 		))
 		self.assertEqual(response.status_code, 200)
+
+
+class UnpinProjectViewTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_post(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.post(reverse(
+			'unpin_project', args=[str(self.project.pk)]
+		))
+		self.assertEqual(response.status_code, 200)
