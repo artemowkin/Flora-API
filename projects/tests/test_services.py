@@ -38,7 +38,8 @@ class GetProjectsServiceTestCase(TestCase):
 	def test_get_concrete(self):
 		service = GetProjectsService()
 		concrete_project = service.get_concrete(self.project.pk)
-		self.assertEqual(concrete_project, self.project)
+		self.assertEqual(concrete_project.pk, self.project.pk)
+		self.assertEqual(concrete_project.views, 1)
 
 	def test_get_concrete_with_unexisting_pk(self):
 		service = GetProjectsService()

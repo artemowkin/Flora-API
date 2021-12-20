@@ -39,6 +39,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 				'title': self.category.title,
 			},
 			'user': self.user.username,
+			'views': 0,
 			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'
 		}])
 
@@ -117,6 +118,7 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 			json_response['category']['title'], self.category.title
 		)
 		self.assertEqual(json_response['images'], ['/media/some_image.jpg'])
+		self.assertEqual(json_response['views'], 1)
 
 	def test_update_concrete_project(self):
 		self.client.login(username='testuser', password='testpass')

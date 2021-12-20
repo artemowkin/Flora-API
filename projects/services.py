@@ -27,7 +27,13 @@ class GetProjectsService:
 	def get_concrete(self, project_pk: Union[UUID,str]) -> Project:
 		"""Return a concrete project by pk"""
 		concrete_project = get_object_or_404(self._model, pk=project_pk)
+		self._add_project_view(concrete_project)
 		return concrete_project
+
+	def _add_project_view(self, project: Project) -> None:
+		"""Increment views for project"""
+		project.views += 1
+		project.save()
 
 	def get_pinned(self) -> QuerySet:
 		"""Get pinned projects"""
