@@ -8,6 +8,9 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # Authentication
+    path('api/v1/auth/', include('accounts.urls')),
+
     # ReDoc
     path('redoc/', TemplateView.as_view(
         template_name='redoc.html',
