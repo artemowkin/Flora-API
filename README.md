@@ -12,7 +12,15 @@ Docker. For this you need the following packages:
 * `docker`
 * `docker-compose`
 
-And, If they're already installed you can build the docker image:
+And, If they're already installed you need to create `.env` file with the
+following content:
+
+```
+DJANGO_SECRET_KEY="2$6#ajqdl8n+-6qs6f#))pivv&hku5rj37iy$y@swp6$v)7+9v"
+DJANGO_ENVIRONMENT="testing"
+```
+
+And build the docker image
 
 ```
 $ docker-compose build 
