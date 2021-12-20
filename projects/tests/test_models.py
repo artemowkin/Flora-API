@@ -33,6 +33,7 @@ class ProjectModelTestCase(BaseProjectModelTestCase):
 		self.assertFalse(self.project.pinned)
 		self.assertEqual(self.project.category, self.category)
 		self.assertEqual(self.project.user, self.user)
+		self.assertEqual(self.project.views, 0)
 		self.assertEqual(self.project.pub_datetime.date(), date.today())
 
 	def test_string_representation(self):

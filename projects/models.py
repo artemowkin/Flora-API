@@ -24,6 +24,7 @@ class Project(models.Model):
 		User, on_delete=models.CASCADE, verbose_name='project user',
 		related_name='projects'
 	)
+	views = models.PositiveIntegerField(editable=False, default=0)
 	pub_datetime = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
