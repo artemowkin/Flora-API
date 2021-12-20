@@ -125,3 +125,11 @@ def add_project_images(project: Project, images: list) -> None:
 	"""Add images for project"""
 	for image in images:
 		ProjectImage.objects.create(project=project, image=image)
+
+
+def pin_project(project: Project) -> dict:
+	"""Pin project. If already pinned, do nothing"""
+	if project.pinned: return {'pinned': False}
+	project.pinned = True
+	project.save()
+	return {'pinned': True}

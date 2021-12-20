@@ -8,7 +8,7 @@ from django.http import Http404
 
 from ..services import (
 	GetProjectsService, CreateProjectService, UpdateProjectService,
-	DeleteProjectService
+	DeleteProjectService, pin_project
 )
 from ..models import Project
 from categories.models import Category
@@ -163,3 +163,28 @@ class DeleteProjectServiceTestCase(TestCase):
 		)
 		with self.assertRaises(PermissionDenied):
 			DeleteProjectService(simple_user)
+
+
+class PinProjectServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_pin_with_not_pinned_project(self):
+		resp = pin_project(self.project)
+		self.assertTrue(self.project.pinned)
+		self.assertEqual(resp, {'pinned': True})
+
+	def test_pin_with_already_pinned_project(self):
+		self.project.pinned = True
+		self.project.save()
+		resp = pin_project(self.project)
+		self.assertTrue(self.project.pinned)
+		self.assertEqual(resp, {'pinned': False})
