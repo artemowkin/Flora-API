@@ -16,6 +16,8 @@ DEBUG = int(os.getenv('DJANGO_DEBUG', '1'))
 
 ALLOWED_HOSTS = ['*']
 
+ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'development')
+
 
 # Application definition
 
@@ -64,9 +66,16 @@ REST_FRAMEWORK = {
         'floraapi.permissions.IsAdminOrReadOnly'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
 }
+
+if ENVIRONMENT in ('testing', 'production'):
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'].pop(0)
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
+        'rest_framework.renderers.JSONRenderer'
+    ]
 
 ROOT_URLCONF = 'floraapi.urls'
 
