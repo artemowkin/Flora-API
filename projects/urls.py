@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
 	path('', views.AllCreateProjectsView.as_view(), name='all_create_projects'),
+	path('search/', views.SearchProjectsView.as_view(), name='search_projects'),
 	path(
 		'<uuid:pk>/', views.ConcreteProjectView.as_view(),
 		name='concrete_project'

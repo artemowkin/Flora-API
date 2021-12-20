@@ -111,3 +111,15 @@ class UnpinProjectViewTestCase(TestCase):
 			'unpin_project', args=[str(self.project.pk)]
 		))
 		self.assertEqual(response.status_code, 200)
+
+
+class SearchProjectsViewTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+
+	def test_get(self):
+		response = self.client.get(reverse('search_projects'))
+		self.assertEqual(response.status_code, 200)

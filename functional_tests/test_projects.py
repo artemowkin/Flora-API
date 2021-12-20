@@ -205,3 +205,25 @@ class UnpinProjectEndpointTestCase(TestCase):
 		)
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.json(), {'unpinned': True})
+
+
+class SearchProjectsEndpointTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+
+	def test_search(self):
+		response = self.client.get(
+			f'/api/v1/projects/search/?category={self.category.pk}'
+			f'&query={self.project.title}'
+		)
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(len(response.json()), 1)
+		self.assertEqual(response.json()[0]['pk'], str(self.project.pk))
