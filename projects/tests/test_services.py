@@ -8,7 +8,7 @@ from django.http import Http404
 
 from ..services import (
 	GetProjectsService, CreateProjectService, UpdateProjectService,
-	DeleteProjectService, pin_project
+	DeleteProjectService, pin_project, unpin_project
 )
 from ..models import Project
 from categories.models import Category
@@ -191,3 +191,30 @@ class PinProjectServiceTestCase(TestCase):
 		project = Project.objects.get(pk=self.project.pk)
 		self.assertTrue(project.pinned)
 		self.assertEqual(resp, {'pinned': False})
+
+
+class UnpinProjectServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+
+	def test_unpin_with_pinned_project(self):
+		resp = unpin_project(self.project.pk)
+		project = Project.objects.get(pk=self.project.pk)
+		self.assertFalse(project.pinned)
+		self.assertEqual(resp, {'unpinned': True})
+
+	def test_pin_with_already_not_pinned_project(self):
+		self.project.pinned = False
+		self.project.save()
+		resp = unpin_project(self.project.pk)
+		project = Project.objects.get(pk=self.project.pk)
+		self.assertFalse(project.pinned)
+		self.assertEqual(resp, {'unpinned': False})

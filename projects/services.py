@@ -134,3 +134,12 @@ def pin_project(project_pk: Union[UUID,str]) -> dict:
 	project.pinned = True
 	project.save()
 	return {'pinned': True}
+
+
+def unpin_project(project_pk: Union[UUID,str]) -> dict:
+	"""Unpin project. if already not pinned, do nothing"""
+	project = get_object_or_404(Project, pk=project_pk)
+	if not project.pinned: return {'unpinned': False}
+	project.pinned = False
+	project.save()
+	return {'unpinned': True}
