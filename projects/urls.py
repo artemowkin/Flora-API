@@ -14,4 +14,5 @@ urlpatterns = [
 		name='upload_project_images'
 	),
 	path('pinned/', views.PinnedProjectsView.as_view(), name='pinned_projects'),
+	path('<uuid:pk>/pin/', views.PinProjectView.as_view(), name='pin_project'),
 ]

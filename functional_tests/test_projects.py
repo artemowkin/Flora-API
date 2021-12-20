@@ -164,3 +164,22 @@ class PinnedProjectsEndpointTestCase(TestCase):
 		json_response = response.json()
 		self.assertEqual(len(json_response), 1)
 		self.assertEqual(json_response[0]['title'], 'new project')
+
+
+class PinProjectEndpointTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_pin(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.post(f'/api/v1/projects/{self.project.pk}/pin/')
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.json(), {'pinned': True})

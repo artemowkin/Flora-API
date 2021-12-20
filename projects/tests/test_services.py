@@ -178,13 +178,15 @@ class PinProjectServiceTestCase(TestCase):
 		)
 
 	def test_pin_with_not_pinned_project(self):
-		resp = pin_project(self.project)
-		self.assertTrue(self.project.pinned)
+		resp = pin_project(self.project.pk)
+		project = Project.objects.get(pk=self.project.pk)
+		self.assertTrue(project.pinned)
 		self.assertEqual(resp, {'pinned': True})
 
 	def test_pin_with_already_pinned_project(self):
 		self.project.pinned = True
 		self.project.save()
-		resp = pin_project(self.project)
-		self.assertTrue(self.project.pinned)
+		resp = pin_project(self.project.pk)
+		project = Project.objects.get(pk=self.project.pk)
+		self.assertTrue(project.pinned)
 		self.assertEqual(resp, {'pinned': False})

@@ -127,8 +127,9 @@ def add_project_images(project: Project, images: list) -> None:
 		ProjectImage.objects.create(project=project, image=image)
 
 
-def pin_project(project: Project) -> dict:
+def pin_project(project_pk: Union[UUID,str]) -> dict:
 	"""Pin project. If already pinned, do nothing"""
+	project = get_object_or_404(Project, pk=project_pk)
 	if project.pinned: return {'pinned': False}
 	project.pinned = True
 	project.save()

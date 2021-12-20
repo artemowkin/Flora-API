@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from django.core.paginator import Paginator
 
 from .services import (
-	ProjectCRUDFacade, add_project_images, GetProjectsService
+	ProjectCRUDFacade, add_project_images, GetProjectsService,
+	pin_project
 )
 from .serializers import ProjectSerializer
 from categories.services import GetCategoriesService
@@ -112,3 +113,10 @@ class PinnedProjectsView(APIView):
 		pinned_projects = get_service.get_pinned()
 		serialized_projects = ProjectSerializer(pinned_projects, many=True).data
 		return Response(serialized_projects, status=200)
+
+
+class PinProjectView(APIView):
+
+	def post(self, request, pk):
+		resp = pin_project(pk)
+		return Response(resp, status=200)
