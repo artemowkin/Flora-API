@@ -38,3 +38,7 @@ class CategoryCRUDFacade:
 	def get_concrete(self, category_pk: Union[UUID,str]) -> Category:
 		"""Return a concrete category"""
 		return self._get_categories_service.get_concrete(category_pk)
+
+	def get_all(self) -> QuerySet:
+		"""Return all categories"""
+		return self._get_categories_service.get_all()
