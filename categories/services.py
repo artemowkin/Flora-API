@@ -91,3 +91,8 @@ class CategoryCRUDFacade:
 		"""Update the concrete category"""
 		update_service = UpdateCategoryService(self._user)
 		return update_service.update(category_pk, title)
+
+	def delete(self, category_pk: Union[UUID,str]) -> None:
+		"""Delete the concrete category"""
+		delete_service = DeleteCategoryService(self._user)
+		return delete_service.delete(category_pk)
