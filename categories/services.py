@@ -4,6 +4,7 @@ from typing import Union
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
+from django.core.exceptions import PermissionDenied
 
 from .models import Category
 
@@ -26,6 +27,24 @@ class GetCategoriesService:
 		"""Return all categories"""
 		all_categories = self._model.objects.all()
 		return all_categories
+
+
+class BaseConcreteCategoryService:
+	"""Base service with user checking"""
+
+	def __init__(self, user: User) -> None:
+		if not user.is_staff: raise PermissionDenied
+		self._model = Category
+		self._user = user
+
+
+class CreateCategoryService(BaseConcreteCategoryService):
+	"""Service to create a new category"""
+
+	def create(self, title: str) -> Category:
+		"""Create a new category entry using title"""
+		category = Category.objects.create(title=title)
+		return category
 
 
 class CategoryCRUDFacade:
