@@ -28,11 +28,15 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		response = self.client.get('/api/v1/projects/')
 		self.assertEqual(response.status_code, 200)
 		json = response.json()
-		self.assertEqual(json, [{
-			'pk': str(self.project.pk),
-			'preview': '/media/some_image.jpg',
-			'title': 'some project',
-		}])
+		self.assertEqual(json, {
+			'current_page': 1,
+			'num_pages': 1,
+			'projects': [{
+				'pk': str(self.project.pk),
+				'preview': '/media/some_image.jpg',
+				'title': 'some project',
+			}],
+		})
 
 	def test_pagination(self):
 		for i in range(21):
@@ -43,10 +47,10 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 
 		response = self.client.get('/api/v1/projects/?page=1')
 		json = response.json()
-		self.assertEqual(len(json), 20)
+		self.assertEqual(len(json['projects']), 20)
 		response = self.client.get('/api/v1/projects/?page=2')
 		json = response.json()
-		self.assertEqual(len(json), 2)
+		self.assertEqual(len(json['projects']), 2)
 
 	def test_create_with_not_authenticated_user(self):
 		response = self._post_project()

@@ -27,17 +27,24 @@ class AllCreateProjectsView(BaseProjectCRUDView):
 
 	def get(self, request):
 		all_projects = self.project_crud.get_all()
-		paginated_projects = self._paginate_projects(all_projects)
-		serialized_projects = SimpleProjectSerializer(
-			paginated_projects, many=True
-		).data
+		paginated_projects, page_obj = self._paginate_projects(all_projects)
+		serialized_projects = self._serialize_projects(
+			paginated_projects, page_obj
+		)
 		return Response(serialized_projects)
 
 	def _paginate_projects(self, all_projects):
 		paginator = Paginator(all_projects, 20)
 		page_number = self._get_page_number(paginator)
 		page = paginator.page(page_number)
-		return page.object_list
+		return page.object_list, page
+
+	def _serialize_projects(self, projects, page):
+		serialized_projects = SimpleProjectSerializer(projects, many=True).data
+		return {
+			'current_page': page.number, 'num_pages': page.paginator.num_pages,
+			'projects': serialized_projects
+		}
 
 	def _get_page_number(self, paginator):
 		page_number = self.request.GET.get('page', '1')
