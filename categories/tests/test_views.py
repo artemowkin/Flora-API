@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from ..models import Category
+
 
 User = get_user_model()
 
@@ -23,3 +25,18 @@ class AllCreateCategoriesViewTestCase(TestCase):
 			'title': 'new category'
 		}, content_type='application/json')
 		self.assertEqual(response.status_code, 201)
+
+
+class ConcreteCategoryViewTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+
+	def test_get(self):
+		response = self.client.get(
+			reverse('concrete_category', args=[self.category.pk])
+		)
+		self.assertEqual(response.status_code, 200)

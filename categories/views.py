@@ -32,3 +32,11 @@ class AllCreateCategoriesView(BaseCategoryCRUDView):
 		category = self.category_crud.create(**self.request.data)
 		serialized_category = CategorySerializer(category).data
 		return Response(serialized_category, status=201)
+
+
+class ConcreteCategoryView(BaseCategoryCRUDView):
+
+	def get(self, request, pk):
+		category = self.category_crud.get_concrete(pk)
+		serialized_category = CategorySerializer(category).data
+		return Response(serialized_category, status=200)

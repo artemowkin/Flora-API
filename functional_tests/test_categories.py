@@ -49,3 +49,19 @@ class AllCreateCategoriesEndpointTestCase(TestCase):
 		json_response = response.json()
 		self.assertIn('pk', json_response)
 		self.assertEqual(json_response['title'], 'new category')
+
+
+class ConcreteCategoryEndpointTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+
+	def test_get_concrete_with_correct_pk(self):
+		response = self.client.get(f'/api/v1/categories/{self.category.pk}/')
+		self.assertEqual(response.status_code, 200)
+		json_response = response.json()
+		self.assertEqual(json_response['pk'], str(self.category.pk))
+		self.assertEqual(json_response['title'], self.category.title)
