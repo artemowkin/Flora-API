@@ -77,3 +77,8 @@ class CategoryCRUDFacade:
 		"""Create a new category"""
 		create_service = CreateCategoryService(self._user)
 		return create_service.create(title)
+
+	def update(self, category_pk: Union[UUID,str], title: str) -> Category:
+		"""Update the concrete category"""
+		update_service = UpdateCategoryService(self._user)
+		return update_service.update(category_pk, title)
