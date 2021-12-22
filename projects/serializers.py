@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.conf import settings
 
 from .models import Project, ProjectImage
 from categories.services import GetCategoriesService
@@ -21,7 +20,7 @@ class ImagesField(serializers.Field):
 	"""Field with many project images"""
 
 	def to_representation(self, images):
-		return get_project_images_urls(images)
+		return get_project_images_urls(images.all())
 
 
 class ProjectSerializer(serializers.ModelSerializer):

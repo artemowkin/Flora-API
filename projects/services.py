@@ -189,11 +189,14 @@ def add_project_images(project: Project, images: list) -> None:
 
 def get_project_images_urls(images: QuerySet) -> list:
 	"""Return images urls list"""
-	images_urls = [
-		settings.MEDIA_URL + image_path[0]
-		for image_path in images.values_list('image')
-	]
+	images_urls = [image_obj.image.url for image_obj in images]
 	return images_urls
+
+
+def get_project_preview_url(images: QuerySet) -> str:
+	"""Return first project image url"""
+	first_image_url = images[0].image.url
+	return first_image_url
 
 
 def pin_project(project_pk: Union[UUID,str]) -> dict:
