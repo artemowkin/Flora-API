@@ -448,6 +448,26 @@ paths:
                       example: "This field may not be blank."
       tags:
       - categories
+  /api/v1/categories/{category_pk}/:
+    get:
+      operationId: concreteCategory
+      description: The concrete category
+      parameters:
+      - name: category_pk
+        in: path
+        required: true
+        description: category pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+      tags:
+      - categories
 
 components:
   schemas:
