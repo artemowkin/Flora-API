@@ -400,6 +400,18 @@ paths:
                 $ref: '#/components/schemas/ListProjects'
       tags:
       - projects
+  /api/v1/categories/:
+    get:
+      operationId: allCategories
+      description: All categories of projects
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCategories'
+      tags:
+      - categories
 
 components:
   schemas:
@@ -459,18 +471,7 @@ components:
         pinned:
           type: boolean
         category:
-          type: object
-          properties:
-            pk:
-              type: string
-              format: uuid
-              minLength: 36
-              maxLength: 36
-            title:
-              type: string
-              example: "Some category"
-              minLength: 1
-              maxLength: 255
+          $ref: "#/components/schemas/Category"
         user:
           type: string
           example: "user"
@@ -480,6 +481,23 @@ components:
         pub_datetime:
           type: string
           example: "2021-12-17T19:26:52.517853Z"
+    Category:
+      type: object
+      properties:
+        pk:
+          type: string
+          format: uuid
+          minLength: 36
+          maxLength: 36
+        title:
+          type: string
+          example: "Some category"
+          minLength: 1
+          maxLength: 255
+    ListCategories:
+      type: array
+      items:
+        $ref: '#/components/schemas/Category'
     ListProjects:
       type: array
       items:
