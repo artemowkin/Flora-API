@@ -54,3 +54,7 @@ class ConcreteCategoryView(BaseCategoryCRUDView):
 		)
 		serialized_category = CategorySerializer(updated_category).data
 		return Response(serialized_category, status=200)
+
+	def delete(self, request, pk):
+		self.category_crud.delete(pk)
+		return Response(status=204)

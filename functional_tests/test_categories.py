@@ -75,3 +75,9 @@ class ConcreteCategoryEndpointTestCase(TestCase):
 		json_response = response.json()
 		self.assertEqual(json_response['pk'], str(self.category.pk))
 		self.assertEqual(json_response['title'], 'new category')
+
+	def test_delete_concrete_category(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.delete(f'/api/v1/categories/{self.category.pk}/')
+		self.assertEqual(response.status_code, 204)
+		self.assertEqual(Category.objects.count(), 0)
