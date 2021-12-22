@@ -510,6 +510,24 @@ paths:
                       example: "This field may not be blank."
       tags:
       - categories
+    delete:
+      operationId: deleteCategory
+      description: Delete an existing category
+      parameters:
+      - name: category_pk
+        in: path
+        required: true
+        description: category pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '403':
+          description: You are not authenticated or don't have permissions
+        '204':
+          description: Successfully deleted
+      tags:
+      - categories
 
 components:
   schemas:
