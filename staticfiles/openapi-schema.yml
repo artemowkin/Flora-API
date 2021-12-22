@@ -466,6 +466,50 @@ paths:
                 $ref: '#/components/schemas/Category'
       tags:
       - categories
+    put:
+      operationId: updateCategory
+      description: Update an existing category
+      parameters:
+      - name: category_pk
+        in: path
+        required: true
+        description: category pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: "Some category"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '403':
+          description: You are not authenticated or don't have permissions
+        '400':
+          description: Error with fields values
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: array
+                    items:
+                      type: string
+                      example: "This field may not be blank."
+      tags:
+      - categories
 
 components:
   schemas:
