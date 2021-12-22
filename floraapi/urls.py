@@ -19,6 +19,7 @@ urlpatterns = [
 
     # Local
     path('api/v1/projects/', include('projects.urls')),
+    path('api/v1/categories/', include('categories.urls')),
 ]
 
 if settings.DEBUG:
