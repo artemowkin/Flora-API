@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .models import Project, ProjectImage
 from categories.services import GetCategoriesService
-from .services import get_project_images_urls
+from .services import get_project_images_urls, get_project_preview_url
 
 
 class CategoryField(serializers.Field):
@@ -21,6 +21,13 @@ class ImagesField(serializers.Field):
 
 	def to_representation(self, images):
 		return get_project_images_urls(images.all())
+
+
+class ProjectPreviewField(serializers.Field):
+	"""Field with project first image url"""
+
+	def to_representation(self, images):
+		return get_project_preview_url(images.all())
 
 
 class ProjectSerializer(serializers.ModelSerializer):
