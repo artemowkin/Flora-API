@@ -123,7 +123,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListProjects'
+                type: object
+                properties:
+                  current_page:
+                    type: number
+                    format: integer
+                    description: Current page number
+                  num_pages:
+                    type: number
+                    format: integer
+                    description: Number of all pages
+                  projects:
+                    $ref: '#/components/schemas/ListProjects'
       tags:
       - projects
     post:
@@ -557,4 +568,18 @@ components:
     ListProjects:
       type: array
       items:
-        $ref: '#/components/schemas/Project'
+        type: object
+        properties:
+          pk:
+            type: string
+            format: uuid
+            minLength: 36
+            maxLength: 36
+          preview:
+            type: string
+            example: "/media/projects/some_image.png"
+          title:
+            type: string
+            example: "Some category"
+            minLength: 1
+            maxLength: 255
