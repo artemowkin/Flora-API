@@ -61,3 +61,8 @@ class CategoryCRUDFacade:
 	def get_all(self) -> QuerySet:
 		"""Return all categories"""
 		return self._get_categories_service.get_all()
+
+	def create(self, title: str) -> Category:
+		"""Create a new category"""
+		create_service = CreateCategoryService(self._user)
+		return create_service.create(title)
