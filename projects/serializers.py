@@ -3,6 +3,7 @@ from django.conf import settings
 
 from .models import Project, ProjectImage
 from categories.services import GetCategoriesService
+from .services import get_project_images_urls
 
 
 class CategoryField(serializers.Field):
@@ -20,11 +21,7 @@ class ImagesField(serializers.Field):
 	"""Field with many project images"""
 
 	def to_representation(self, images):
-		images_urls = [
-			settings.MEDIA_URL + image_path[0]
-			for image_path in images.values_list('image')
-		]
-		return images_urls
+		return get_project_images_urls(images)
 
 
 class ProjectSerializer(serializers.ModelSerializer):

@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import QuerySet, Q
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from .models import Project, ProjectImage
 from categories.models import Category
@@ -184,6 +185,15 @@ def add_project_images(project: Project, images: list) -> None:
 	"""Add images for project"""
 	for image in images:
 		ProjectImage.objects.create(project=project, image=image)
+
+
+def get_project_images_urls(images: QuerySet) -> list:
+	"""Return images urls list"""
+	images_urls = [
+		settings.MEDIA_URL + image_path[0]
+		for image_path in images.values_list('image')
+	]
+	return images_urls
 
 
 def pin_project(project_pk: Union[UUID,str]) -> dict:
