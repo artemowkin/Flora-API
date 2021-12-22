@@ -58,6 +58,15 @@ class UpdateCategoryService(BaseConcreteCategoryService):
 		return category
 
 
+class DeleteCategoryService(BaseConcreteCategoryService):
+	"""Service to delete the concrete category"""
+
+	def delete(self, category_pk: Union[UUID,str]) -> None:
+		"""Delete the concrete category by pk"""
+		category = get_object_or_404(self._model, pk=category_pk)
+		category.delete()
+
+
 class CategoryCRUDFacade:
 	"""Facade with CRUD functionality for categories"""
 
