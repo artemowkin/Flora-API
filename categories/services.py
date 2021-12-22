@@ -3,6 +3,7 @@ from typing import Union
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
 
 from .models import Category
 
@@ -20,6 +21,11 @@ class GetCategoriesService:
 		"""Return a concrete category using pk field. 404 if not found"""
 		category = get_object_or_404(self._model, pk=category_pk)
 		return category
+
+	def get_all(self) -> QuerySet:
+		"""Return all categories"""
+		all_categories = self._model.objects.all()
+		return all_categories
 
 
 class CategoryCRUDFacade:

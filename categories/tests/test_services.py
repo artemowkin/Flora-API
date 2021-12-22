@@ -20,3 +20,8 @@ class GetCategoriesServiceTestCase(TestCase):
 	def test_get_concrete_with_unexisting_pk(self):
 		with self.assertRaises(Http404):
 			category = self.service.get_concrete(uuid4())
+
+	def test_get_all(self):
+		categories = self.service.get_all()
+		self.assertEqual(categories.count(), 1)
+		self.assertEqual(categories[0], self.category)
