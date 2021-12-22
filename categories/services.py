@@ -47,6 +47,17 @@ class CreateCategoryService(BaseConcreteCategoryService):
 		return category
 
 
+class UpdateCategoryService(BaseConcreteCategoryService):
+	"""Service to update the concrete category"""
+
+	def update(self, category_pk: Union[UUID,str], title: str) -> Category:
+		"""Update the concrete category by pk"""
+		category = get_object_or_404(self._model, pk=category_pk)
+		category.title = title
+		category.save()
+		return category
+
+
 class CategoryCRUDFacade:
 	"""Facade with CRUD functionality for categories"""
 

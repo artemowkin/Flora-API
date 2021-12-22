@@ -7,7 +7,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import PermissionDenied
 
 from ..models import Category
-from ..services import GetCategoriesService, CreateCategoryService
+from ..services import (
+	GetCategoriesService, CreateCategoryService, UpdateCategoryService
+)
 
 
 User = get_user_model()
@@ -57,3 +59,29 @@ class CreateCategoryServiceTestCase(TestCase):
 		)
 		with self.assertRaises(PermissionDenied):
 			CreateCategoryService(simple_user)
+
+
+class UpdateCategoryServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.category = Category.objects.create(title='some category')
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+
+	def test_update(self):
+		service = UpdateCategoryService(self.user)
+		category = service.update(self.category.pk, 'new category title')
+		self.assertEqual(category.pk, self.category.pk)
+		self.assertEqual(category.title, 'new category title')
+
+	def test_update_with_not_authenticated_user(self):
+		with self.assertRaises(PermissionDenied):
+			UpdateCategoryService(AnonymousUser())
+
+	def test_update_with_simple_user(self):
+		simple_user = User.objects.create_user(
+			username='simpleuser', password='testpass'
+		)
+		with self.assertRaises(PermissionDenied):
+			UpdateCategoryService(simple_user)
