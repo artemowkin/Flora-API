@@ -30,17 +30,8 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		json = response.json()
 		self.assertEqual(json, [{
 			'pk': str(self.project.pk),
-			'title': self.project.title,
-			'description': self.project.description,
-			'images': ['/media/some_image.jpg'],
-			'pinned': False,
-			'category': {
-				'pk': str(self.category.pk),
-				'title': self.category.title,
-			},
-			'user': self.user.username,
-			'views': 0,
-			'pub_datetime': self.project.pub_datetime.isoformat()[:-6]+'Z'
+			'preview': '/media/some_image.jpg',
+			'title': 'some project',
 		}])
 
 	def test_pagination(self):

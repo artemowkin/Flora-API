@@ -195,6 +195,7 @@ def get_project_images_urls(images: QuerySet) -> list:
 
 def get_project_preview_url(images: QuerySet) -> str:
 	"""Return first project image url"""
+	if not images: return ''
 	first_image_url = images[0].image.url
 	return first_image_url
 

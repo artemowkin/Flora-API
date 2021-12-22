@@ -8,7 +8,7 @@ from .services import (
 	ProjectCRUDFacade, add_project_images, GetProjectsService,
 	pin_project, unpin_project, SearchProjectsService
 )
-from .serializers import ProjectSerializer
+from .serializers import SimpleProjectSerializer, DetailProjectSerializer
 from categories.services import GetCategoriesService
 
 
@@ -28,7 +28,7 @@ class AllCreateProjectsView(BaseProjectCRUDView):
 	def get(self, request):
 		all_projects = self.project_crud.get_all()
 		paginated_projects = self._paginate_projects(all_projects)
-		serialized_projects = ProjectSerializer(
+		serialized_projects = SimpleProjectSerializer(
 			paginated_projects, many=True
 		).data
 		return Response(serialized_projects)
@@ -46,10 +46,10 @@ class AllCreateProjectsView(BaseProjectCRUDView):
 		return int(page_number)
 
 	def post(self, request):
-		serializer = ProjectSerializer(data=request.data)
+		serializer = DetailProjectSerializer(data=request.data)
 		if serializer.is_valid():
 			project = self._create_project()
-			serialized_project = ProjectSerializer(project).data
+			serialized_project = DetailProjectSerializer(project).data
 			return Response(serialized_project, status=201)
 
 		return Response(serializer.errors, status=400)
@@ -71,14 +71,14 @@ class ConcreteProjectView(BaseProjectCRUDView):
 
 	def get(self, request, pk):
 		project = self.project_crud.get_concrete(pk)
-		serialized_project = ProjectSerializer(project).data
+		serialized_project = DetailProjectSerializer(project).data
 		return Response(serialized_project)
 
 	def put(self, request, pk):
-		serializer = ProjectSerializer(data=request.data)
+		serializer = DetailProjectSerializer(data=request.data)
 		if serializer.is_valid():
 			updated_project =  self._update_project(pk)
-			serialized_project = ProjectSerializer(updated_project).data
+			serialized_project = DetailProjectSerializer(updated_project).data
 			return Response(serialized_project, status=200)
 
 		return Response(serializer.errors, status=400)
@@ -111,7 +111,9 @@ class PinnedProjectsView(APIView):
 	def get(self, request):
 		get_service = GetProjectsService()
 		pinned_projects = get_service.get_pinned()
-		serialized_projects = ProjectSerializer(pinned_projects, many=True).data
+		serialized_projects = SimpleProjectSerializer(
+			pinned_projects, many=True
+		).data
 		return Response(serialized_projects, status=200)
 
 
@@ -134,5 +136,5 @@ class SearchProjectsView(APIView):
 	def get(self, request):
 		service = SearchProjectsService()
 		projects = service.search(**request.GET)
-		serialized_projects = ProjectSerializer(projects, many=True).data
+		serialized_projects = SimpleProjectSerializer(projects, many=True).data
 		return Response(serialized_projects, status=200)

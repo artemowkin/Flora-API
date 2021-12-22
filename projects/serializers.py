@@ -30,7 +30,18 @@ class ProjectPreviewField(serializers.Field):
 		return get_project_preview_url(images.all())
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class SimpleProjectSerializer(serializers.ModelSerializer):
+	"""Serializer using in list of projects with simple necessary data"""
+
+	preview = ProjectPreviewField(source='images', read_only=True)
+
+	class Meta:
+		model = Project
+		fields = ('pk', 'title', 'preview')
+		read_only_fields = ('pk', 'title', 'preview')
+
+
+class DetailProjectSerializer(serializers.ModelSerializer):
 	"""Serializer for project"""
 
 	user = serializers.CharField(source='user.username', read_only=True)
