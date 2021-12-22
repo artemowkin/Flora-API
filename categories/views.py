@@ -40,3 +40,17 @@ class ConcreteCategoryView(BaseCategoryCRUDView):
 		category = self.category_crud.get_concrete(pk)
 		serialized_category = CategorySerializer(category).data
 		return Response(serialized_category, status=200)
+
+	def put(self, request, pk):
+		serializer = CategorySerializer(data=request.data)
+		if serializer.is_valid():
+			return self._serializer_valid(pk)
+
+		return Response(serializer.errors, status=400)
+
+	def _serializer_valid(self, pk):
+		updated_category = self.category_crud.update(
+			pk, self.request.data['title']
+		)
+		serialized_category = CategorySerializer(updated_category).data
+		return Response(serialized_category, status=200)

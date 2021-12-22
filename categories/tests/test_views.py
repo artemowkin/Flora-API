@@ -40,3 +40,12 @@ class ConcreteCategoryViewTestCase(TestCase):
 			reverse('concrete_category', args=[self.category.pk])
 		)
 		self.assertEqual(response.status_code, 200)
+
+	def test_put(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.put(
+			reverse('concrete_category', args=[self.category.pk]), {
+				'title': 'new category'
+			}, content_type='application/json'
+		)
+		self.assertEqual(response.status_code, 200)

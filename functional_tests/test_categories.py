@@ -65,3 +65,13 @@ class ConcreteCategoryEndpointTestCase(TestCase):
 		json_response = response.json()
 		self.assertEqual(json_response['pk'], str(self.category.pk))
 		self.assertEqual(json_response['title'], self.category.title)
+
+	def test_update_concrete_category(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.put(f'/api/v1/categories/{self.category.pk}/', {
+			'title': 'new category'
+		}, content_type='application/json')
+		self.assertEqual(response.status_code, 200)
+		json_response = response.json()
+		self.assertEqual(json_response['pk'], str(self.category.pk))
+		self.assertEqual(json_response['title'], 'new category')
