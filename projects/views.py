@@ -12,14 +12,14 @@ from .serializers import ProjectSerializer
 from categories.services import GetCategoriesService
 
 
-class BaseProjectView(APIView):
+class BaseProjectCRUDView(APIView):
 
 	def dispatch(self, request, *args, **kwargs):
 		self.project_crud = ProjectCRUDFacade(request.user)
 		return super().dispatch(request, *args, **kwargs)
 
 
-class AllCreateProjectsView(BaseProjectView):
+class AllCreateProjectsView(BaseProjectCRUDView):
 
 	def dispatch(self, request, *args, **kwargs):
 		self.project_crud = ProjectCRUDFacade(request.user)
@@ -63,7 +63,7 @@ class AllCreateProjectsView(BaseProjectView):
 		return self.project_crud.create(**self.request.data)
 
 
-class ConcreteProjectView(BaseProjectView):
+class ConcreteProjectView(BaseProjectCRUDView):
 
 	def dispatch(self, request, *args, **kwargs):
 		self.project_crud = ProjectCRUDFacade(request.user)
@@ -96,7 +96,7 @@ class ConcreteProjectView(BaseProjectView):
 		return Response(status=204)
 
 
-class ProjectImagesUploadView(BaseProjectView):
+class ProjectImagesUploadView(BaseProjectCRUDView):
 	parser_classes = [MultiPartParser]
 
 	def post(self, request, pk):
