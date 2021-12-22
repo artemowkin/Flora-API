@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.contrib.auht import get_user_model
+from django.contrib.auth import get_user_model
 
 from categories.models import Category
 
@@ -45,7 +45,7 @@ class AllCreateCategoriesEndpointTestCase(TestCase):
 	def test_create(self):
 		self.client.login(username='testuser', password='testpass')
 		response = self._request_create_category()
-		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.status_code, 201)
 		json_response = response.json()
 		self.assertIn('pk', json_response)
 		self.assertEqual(json_response['title'], 'new category')

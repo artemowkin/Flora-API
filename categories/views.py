@@ -20,3 +20,15 @@ class AllCreateCategoriesView(BaseCategoryCRUDView):
 			all_categories, many=True
 		).data
 		return Response(serialized_categories, status=200)
+
+	def post(self, request):
+		serializer = CategorySerializer(data=request.data)
+		if serializer.is_valid():
+			return self._serializer_valid()
+
+		return Response(serializer.errors, status=400)
+
+	def _serializer_valid(self):
+		category = self.category_crud.create(**self.request.data)
+		serialized_category = CategorySerializer(category).data
+		return Response(serialized_category, status=201)
