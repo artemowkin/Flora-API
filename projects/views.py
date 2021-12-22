@@ -21,13 +21,10 @@ class BaseProjectCRUDView(APIView):
 
 class AllCreateProjectsView(BaseProjectCRUDView):
 
-	def dispatch(self, request, *args, **kwargs):
-		self.project_crud = ProjectCRUDFacade(request.user)
-		return super().dispatch(request, *args, **kwargs)
-
 	def get(self, request):
-		all_projects = self.project_crud.get_all()
-		paginated_projects, page_obj = self._paginate_projects(all_projects)
+		service = SearchProjectsService()
+		projects = service.search(**request.GET)
+		paginated_projects, page_obj = self._paginate_projects(projects)
 		serialized_projects = self._serialize_projects(
 			paginated_projects, page_obj
 		)
@@ -136,12 +133,3 @@ class UnpinProjectView(APIView):
 	def post(self, request, pk):
 		resp = unpin_project(pk)
 		return Response(resp, status=200)
-
-
-class SearchProjectsView(APIView):
-
-	def get(self, request):
-		service = SearchProjectsService()
-		projects = service.search(**request.GET)
-		serialized_projects = SimpleProjectSerializer(projects, many=True).data
-		return Response(serialized_projects, status=200)
