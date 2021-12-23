@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from likes import views as likes_views
 
 
 urlpatterns = [
@@ -19,4 +20,8 @@ urlpatterns = [
 		'<uuid:pk>/unpin/', views.UnpinProjectView.as_view(),
 		name='unpin_project'
 	),
+	path(
+		'<uuid:pk>/like/', likes_views.LikeProjectView.as_view(),
+		name='like_project'
+	)
 ]

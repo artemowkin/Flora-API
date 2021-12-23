@@ -220,3 +220,35 @@ class UnpinProjectEndpointTestCase(TestCase):
 		)
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.json(), {'unpinned': True})
+
+
+class LikeProjectEndpointTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+
+	def test_like_unliked_project(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.post(
+			f'/api/v1/projects/{self.project.pk}/like/'
+		)
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.json(), {'liked': True})
+
+	def test_like_already_liked_project(self):
+		self.client.login(username='testuser', password='testpass')
+		self.client.post(
+			f'/api/v1/projects/{self.project.pk}/like/'
+		)
+		response = self.client.post(
+			f'/api/v1/projects/{self.project.pk}/like/'
+		)
+		self.assertEqual(response.status_code, 200)
+		self.assertEqual(response.json(), {'liked': False})
