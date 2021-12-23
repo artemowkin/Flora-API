@@ -24,4 +24,4 @@ class GetLikesCountServiceTestCase(TestCase):
 		self.like = Like.objects.create(project=self.project, user=self.user)
 
 	def test_get_projects_like_count(self):
-		self.assertEqual(get_likes_count(self.project), 1)
+		self.assertEqual(get_likes_count(self.project.likes.all()), 1)

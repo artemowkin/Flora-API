@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 
+from likes.models import Like
 from categories.models import Category
 from projects.models import Project, ProjectImage
 
@@ -23,6 +24,9 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		self.project_image = ProjectImage.objects.create(
 			image='some_image.jpg', project=self.project
 		)
+		self.project_like = Like.objects.create(
+			project=self.project, user=self.user
+		)
 
 	def test_get_all_projects(self):
 		response = self.client.get('/api/v1/projects/')
@@ -35,6 +39,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 				'pk': str(self.project.pk),
 				'preview': '/media/some_image.jpg',
 				'title': 'some project',
+				'likes': 1
 			}],
 		})
 
@@ -111,6 +116,9 @@ class ConcreteProjectEndpointsTestCase(TestCase):
 		)
 		self.project_image = ProjectImage.objects.create(
 			image='some_image.jpg', project=self.project
+		)
+		self.project_like = Like.objects.create(
+			project=self.project, user=self.user
 		)
 
 	def test_get_concrete_project(self):

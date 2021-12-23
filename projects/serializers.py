@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import Project, ProjectImage
 from categories.services import GetCategoriesService
+from likes.services import get_likes_count
 from .services import get_project_images_urls, get_project_preview_url
 
 
@@ -30,15 +31,23 @@ class ProjectPreviewField(serializers.Field):
 		return get_project_preview_url(images.all())
 
 
+class LikesField(serializers.Field):
+	"""Field with project likes count"""
+
+	def to_representation(self, likes):
+		return get_likes_count(likes.all())
+
+
 class SimpleProjectSerializer(serializers.ModelSerializer):
 	"""Serializer using in list of projects with simple necessary data"""
 
 	preview = ProjectPreviewField(source='images', read_only=True)
+	likes = LikesField(read_only=True)
 
 	class Meta:
 		model = Project
-		fields = ('pk', 'title', 'preview')
-		read_only_fields = ('pk', 'title', 'preview')
+		fields = ('pk', 'title', 'preview', 'likes')
+		read_only_fields = ('pk', 'title', 'preview', 'likes')
 
 
 class DetailProjectSerializer(serializers.ModelSerializer):
@@ -47,13 +56,14 @@ class DetailProjectSerializer(serializers.ModelSerializer):
 	user = serializers.CharField(source='user.username', read_only=True)
 	images = ImagesField(read_only=True)
 	category = CategoryField()
+	likes = LikesField(read_only=True)
 
 	class Meta:
 		model = Project
 		fields = (
 			'pk', 'title', 'description', 'images', 'pinned', 'category',
-			'user', 'views', 'pub_datetime'
+			'user', 'views', 'likes', 'pub_datetime'
 		)
 		read_only_fields = (
-			'pk', 'user', 'images', 'pub_datetime', 'pinned', 'views'
+			'pk', 'user', 'images', 'pub_datetime', 'pinned', 'likes', 'views'
 		)

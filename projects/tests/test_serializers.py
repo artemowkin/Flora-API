@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from likes.models import Like
 from ..models import Project, ProjectImage
 from ..serializers import SimpleProjectSerializer, DetailProjectSerializer
 from categories.models import Category
@@ -23,6 +24,9 @@ class SimpleProjectSerializertestCase(TestCase):
 		self.project_image = ProjectImage.objects.create(
 			image='some_image.jpg', project=self.project
 		)
+		self.project_like = Like.objects.create(
+			project=self.project, user=self.user
+		)
 
 	def test_serialized_project(self):
 		serialized_project = SimpleProjectSerializer(self.project).data
@@ -30,6 +34,7 @@ class SimpleProjectSerializertestCase(TestCase):
 			'pk': str(self.project.pk),
 			'preview': '/media/some_image.jpg',
 			'title': 'some project',
+			'likes': 1,
 		})
 
 
@@ -47,6 +52,9 @@ class DetailProjectSerializerTestCase(TestCase):
 		self.project_image = ProjectImage.objects.create(
 			image='some_image.jpg', project=self.project
 		)
+		self.project_like = Like.objects.create(
+			user=self.user, project=self.project
+		)
 		project_pub_datetime = (
 			self.project.pub_datetime.isoformat()[:-6] + 'Z'
 		)
@@ -62,6 +70,7 @@ class DetailProjectSerializerTestCase(TestCase):
 			},
 			'user': self.user.username,
 			'views': 0,
+			'likes': 1,
 			'pub_datetime': project_pub_datetime,
 		}
 
