@@ -594,6 +594,9 @@ components:
         views:
           type: number
           format: integer
+        likes:
+          type: number
+          format: integer
         pub_datetime:
           type: string
           example: "2021-12-17T19:26:52.517853Z"
@@ -632,3 +635,6 @@ components:
             example: "Some category"
             minLength: 1
             maxLength: 255
+          likes:
+            type: number
+            format: integer
