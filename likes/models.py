@@ -19,3 +19,8 @@ class Like(models.Model):
 
 	class Meta:
 		db_table = 'project_likes'
+		constraints = [
+			models.UniqueConstraint(
+				name='unique_project_like', fields=('project', 'user')
+			)
+		]

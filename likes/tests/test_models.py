@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
 
 from projects.models import Project
 from categories.models import Category
@@ -26,3 +27,7 @@ class LikeModelTestCase(TestCase):
 		self.assertEqual(self.like.user, self.user)
 		self.assertEqual(self.like.project, self.project)
 		self.assertEqual(self.project.likes.count(), 1)
+
+	def test_project_user_unique_together_constraint(self):
+		with self.assertRaises(IntegrityError):
+			Like.objects.create(project=self.project, user=self.user)
