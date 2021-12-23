@@ -75,10 +75,13 @@ class DetailProjectSerializerTestCase(TestCase):
 			'views': 0,
 			'likes': 1,
 			'pub_datetime': project_pub_datetime,
+			'is_already_liked': True,
 		}
 
 	def test_serialized_project(self):
-		serialized_project = DetailProjectSerializer(self.project).data
+		serialized_project = DetailProjectSerializer(
+			self.project, context={'user': self.user}
+		).data
 		self.assertEqual(serialized_project, self.project_data)
 
 	def test_is_data_valid(self):

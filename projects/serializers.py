@@ -51,6 +51,7 @@ class SimpleProjectSerializer(serializers.ModelSerializer):
 		read_only_fields = ('pk', 'title', 'preview', 'likes')
 
 	def get_is_already_liked(self, project):
+		if not 'user' in self.context: return False
 		return is_already_liked(project, self.context['user'])
 
 
@@ -61,13 +62,18 @@ class DetailProjectSerializer(serializers.ModelSerializer):
 	images = ImagesField(read_only=True)
 	category = CategoryField()
 	likes = LikesField(read_only=True)
+	is_already_liked = serializers.SerializerMethodField(read_only=True)
 
 	class Meta:
 		model = Project
 		fields = (
 			'pk', 'title', 'description', 'images', 'pinned', 'category',
-			'user', 'views', 'likes', 'pub_datetime'
+			'user', 'views', 'likes', 'is_already_liked', 'pub_datetime'
 		)
 		read_only_fields = (
 			'pk', 'user', 'images', 'pub_datetime', 'pinned', 'likes', 'views'
 		)
+
+	def get_is_already_liked(self, project):
+		if not 'user' in self.context: return False
+		return is_already_liked(project, self.context['user'])

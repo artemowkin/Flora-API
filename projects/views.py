@@ -77,17 +77,24 @@ class ConcreteProjectView(BaseProjectCRUDView):
 
 	def get(self, request, pk):
 		project = self.project_crud.get_concrete(pk)
-		serialized_project = DetailProjectSerializer(project).data
+		serialized_project = DetailProjectSerializer(
+			project, context={'user': request.user}
+		).data
 		return Response(serialized_project)
 
 	def put(self, request, pk):
 		serializer = DetailProjectSerializer(data=request.data)
 		if serializer.is_valid():
 			updated_project =  self._update_project(pk)
-			serialized_project = DetailProjectSerializer(updated_project).data
+			serialized_project = self._serialize_project(updated_project)
 			return Response(serialized_project, status=200)
 
 		return Response(serializer.errors, status=400)
+
+	def _serialize_project(self, project):
+		return DetailProjectSerializer(
+			project, context={'user': self.request.user}
+		).data
 
 	def _update_project(self, pk):
 		get_categories_service = GetCategoriesService()
