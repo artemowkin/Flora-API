@@ -29,12 +29,15 @@ class SimpleProjectSerializertestCase(TestCase):
 		)
 
 	def test_serialized_project(self):
-		serialized_project = SimpleProjectSerializer(self.project).data
+		serialized_project = SimpleProjectSerializer(
+			self.project, context={'user': self.user}
+		).data
 		self.assertEqual(serialized_project, {
 			'pk': str(self.project.pk),
 			'preview': '/media/some_image.jpg',
 			'title': 'some project',
 			'likes': 1,
+			'is_already_liked': True,
 		})
 
 

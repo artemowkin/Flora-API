@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .models import Project, ProjectImage
 from categories.services import GetCategoriesService
-from likes.services import get_likes_count
+from likes.services import get_likes_count, is_already_liked
 from .services import get_project_images_urls, get_project_preview_url
 
 
@@ -43,11 +43,15 @@ class SimpleProjectSerializer(serializers.ModelSerializer):
 
 	preview = ProjectPreviewField(source='images', read_only=True)
 	likes = LikesField(read_only=True)
+	is_already_liked = serializers.SerializerMethodField(read_only=True)
 
 	class Meta:
 		model = Project
-		fields = ('pk', 'title', 'preview', 'likes')
+		fields = ('pk', 'title', 'preview', 'likes', 'is_already_liked')
 		read_only_fields = ('pk', 'title', 'preview', 'likes')
+
+	def get_is_already_liked(self, project):
+		return is_already_liked(project, self.context['user'])
 
 
 class DetailProjectSerializer(serializers.ModelSerializer):

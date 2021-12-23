@@ -29,6 +29,7 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 		)
 
 	def test_get_all_projects(self):
+		self.client.login(username='testuser', password='testpass')
 		response = self.client.get('/api/v1/projects/')
 		self.assertEqual(response.status_code, 200)
 		json = response.json()
@@ -39,9 +40,16 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 				'pk': str(self.project.pk),
 				'preview': '/media/some_image.jpg',
 				'title': 'some project',
-				'likes': 1
+				'likes': 1,
+				'is_already_liked': True
 			}],
 		})
+
+	def test_get_all_with_not_authenticated_user_not_liked(self):
+		response = self.client.get('/api/v1/projects/')
+		self.assertEqual(response.status_code, 200)
+		json = response.json()
+		self.assertFalse(json['projects'][0]['is_already_liked'])
 
 	def test_pagination(self):
 		for i in range(21):

@@ -37,7 +37,9 @@ class AllCreateProjectsView(BaseProjectCRUDView):
 		return page.object_list, page
 
 	def _serialize_projects(self, projects, page):
-		serialized_projects = SimpleProjectSerializer(projects, many=True).data
+		serialized_projects = SimpleProjectSerializer(
+			projects, many=True, context={'user': self.request.user}
+		).data
 		return {
 			'current_page': page.number, 'num_pages': page.paginator.num_pages,
 			'projects': serialized_projects
@@ -116,7 +118,7 @@ class PinnedProjectsView(APIView):
 		get_service = GetProjectsService()
 		pinned_projects = get_service.get_pinned()
 		serialized_projects = SimpleProjectSerializer(
-			pinned_projects, many=True
+			pinned_projects, many=True, context={'user': request.user}
 		).data
 		return Response(serialized_projects, status=200)
 
