@@ -620,6 +620,9 @@ components:
         likes:
           type: number
           format: integer
+        is_already_liked:
+          type: boolean
+          example: false
         pub_datetime:
           type: string
           example: "2021-12-17T19:26:52.517853Z"
@@ -661,3 +664,6 @@ components:
           likes:
             type: number
             format: integer
+          is_already_liked:
+            type: boolean
+            example: false
