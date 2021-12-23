@@ -23,3 +23,13 @@ def like_project(project_pk: Union[UUID,str], user: User) -> bool:
 	like, created = Like.objects.get_or_create(project=project, user=user)
 	if not created: return False
 	return True
+
+
+def is_already_liked(project: Project, user: User) -> bool:
+	"""Is project already liked by user"""
+	if not user.is_authenticated: return False
+	try:
+		Like.objects.get(project=project, user=user)
+		return True
+	except Like.DoesNotExist:
+		return False
