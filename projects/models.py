@@ -29,7 +29,7 @@ class Project(models.Model):
 
 	class Meta:
 		db_table = 'projects'
-		ordering = ('pub_datetime',)
+		ordering = ('-pub_datetime',)
 		verbose_name = 'project'
 		verbose_name_plural = 'projects'
 
