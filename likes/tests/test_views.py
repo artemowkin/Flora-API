@@ -27,3 +27,23 @@ class LikeProjectViewTestCase(TestCase):
 			reverse('like_project', args=[self.project.pk])
 		)
 		self.assertEqual(request.status_code, 200)
+
+
+class UnlikeProjectViewTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='test category')
+		self.project = Project.objects.create(
+			title='test project', description='test description',
+			category=self.category, user=self.user
+		)
+
+	def test_post(self):
+		self.client.login(username='testuser', password='testpass')
+		request = self.client.post(
+			reverse('unlike_project', args=[self.project.pk])
+		)
+		self.assertEqual(request.status_code, 200)

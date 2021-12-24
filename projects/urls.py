@@ -23,5 +23,9 @@ urlpatterns = [
 	path(
 		'<uuid:pk>/like/', likes_views.LikeProjectView.as_view(),
 		name='like_project'
-	)
+	),
+	path(
+		'<uuid:pk>/unlike/', likes_views.UnlikeProjectView.as_view(),
+		name='unlike_project'
+	),
 ]
