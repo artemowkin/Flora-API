@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -10,8 +12,10 @@ User = get_user_model()
 class Comment(models.Model):
 	"""Project comment model"""
 
+	uuid = models.UUIDField(primary_key=True, editable=False, default=uuid4)
 	reply_on = models.ForeignKey(
-		'self', on_delete=models.CASCADE, related_name='replies'
+		'self', on_delete=models.CASCADE, related_name='replies', blank=True,
+		null=True
 	)
 	project = models.ForeignKey(
 		Project, on_delete=models.CASCADE, related_name='comments'
