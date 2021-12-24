@@ -38,16 +38,27 @@ class LikesField(serializers.Field):
 		return get_likes_count(likes.all())
 
 
+class CommentsCountField(serializers.Field):
+	"""Field with comments count value"""
+
+	def to_representation(self, comments):
+		return comments.count()
+
+
 class SimpleProjectSerializer(serializers.ModelSerializer):
 	"""Serializer using in list of projects with simple necessary data"""
 
 	preview = ProjectPreviewField(source='images', read_only=True)
 	likes = LikesField(read_only=True)
 	is_already_liked = serializers.SerializerMethodField(read_only=True)
+	comments_count = CommentsCountField(source='comments', read_only=True)
 
 	class Meta:
 		model = Project
-		fields = ('pk', 'title', 'preview', 'likes', 'is_already_liked')
+		fields = (
+			'pk', 'title', 'preview', 'likes', 'is_already_liked',
+			'comments_count'
+		)
 		read_only_fields = ('pk', 'title', 'preview', 'likes')
 
 	def get_is_already_liked(self, project):
@@ -63,12 +74,14 @@ class DetailProjectSerializer(serializers.ModelSerializer):
 	category = CategoryField()
 	likes = LikesField(read_only=True)
 	is_already_liked = serializers.SerializerMethodField(read_only=True)
+	comments_count = CommentsCountField(source='comments', read_only=True)
 
 	class Meta:
 		model = Project
 		fields = (
 			'pk', 'title', 'description', 'images', 'pinned', 'category',
-			'user', 'views', 'likes', 'is_already_liked', 'pub_datetime'
+			'user', 'views', 'likes', 'is_already_liked', 'pub_datetime',
+			'comments_count'
 		)
 		read_only_fields = (
 			'pk', 'user', 'images', 'pub_datetime', 'pinned', 'likes', 'views'

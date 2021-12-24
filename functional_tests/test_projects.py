@@ -41,7 +41,8 @@ class AllCreateProjectsEndpointTestCase(TestCase):
 				'preview': '/media/some_image.jpg',
 				'title': 'some project',
 				'likes': 1,
-				'is_already_liked': True
+				'is_already_liked': True,
+				'comments_count': 0
 			}],
 		})
 
