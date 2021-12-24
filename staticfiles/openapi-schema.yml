@@ -458,6 +458,26 @@ paths:
                     type: boolean
       tags:
       - projects
+  /api/v1/projects/{project_pk}/comments/:
+    get:
+      operationId: getAllProjectComments
+      description: Return all the concrete project comments
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListComments'
+      tags:
+      - projects
   /api/v1/categories/:
     get:
       operationId: allCategories
@@ -712,3 +732,33 @@ components:
           comments_count:
             type: number
             format: integer
+    Comment:
+      type: object
+      properties:
+        pk:
+          type: string
+          format: uuid
+          minLength: 36
+          maxLength: 36
+        reply_on:
+          required: false
+          description: "Comment that this comment replies on. Null if this
+          comment not replies any comments"
+          type: string
+          format: uuid
+          minLength: 36
+          maxLength: 36
+        text:
+          type: string
+          example: "Some comment"
+          minLength: 1
+        user:
+          type: string
+          example: "user"
+        pub_datetime:
+          type: string
+          example: "2021-12-17T19:26:52.517853Z"
+    ListComments:
+      type: array
+      items:
+        $ref: '#/components/schemas/Comment'
