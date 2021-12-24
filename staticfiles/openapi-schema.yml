@@ -20,12 +20,15 @@ paths:
                   type: string
                   format: email
                   example: example@gmail.com
+                  required: true
                 password1:
                   type: string
                   example: password
+                  required: true
                 password2:
                   type: string
                   example: password
+                  required: true
       responses:
         '200':
           content:
@@ -51,9 +54,11 @@ paths:
                   type: string
                   format: email
                   example: example@gmail.com
+                  required: true
                 password:
                   type: string
                   example: password
+                  required: true
       responses:
         '200':
           content:
@@ -164,15 +169,18 @@ paths:
                   minLength: 1
                   maxLength: 255
                   example: "Some project"
+                  required: true
                 description:
                   type: string
                   minlength: 1
                   example: "Some description"
+                  required: true
                 category:
                   type: string
                   format: uuid
                   minLength: 36
                   maxLength: 36
+                  required: true
       responses:
         '201':
           content:
@@ -247,15 +255,18 @@ paths:
                   minLength: 1
                   maxLength: 255
                   example: "Some project"
+                  required: true
                 description:
                   type: string
                   minlength: 1
                   example: "Some description"
+                  required: true
                 category:
                   type: string
                   format: uuid
                   minLength: 36
                   maxLength: 36
+                  required: true
       responses:
         '200':
           content:
@@ -327,12 +338,15 @@ paths:
                 image1:
                   type: string
                   format: binary
+                  required: false
                 image2:
                   type: string
                   format: binary
+                  required: false
                 imageN:
                   type: string
                   format: binary
+                  required: false
       responses:
         '204':
           description: Successfully added images
@@ -470,6 +484,7 @@ paths:
                   minLength: 1
                   maxLength: 255
                   example: "Some category"
+                  required: true
       responses:
         '201':
           content:
@@ -534,6 +549,7 @@ paths:
                   minLength: 1
                   maxLength: 255
                   example: "Some category"
+                  required: true
       responses:
         '200':
           content:
