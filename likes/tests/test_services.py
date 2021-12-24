@@ -2,7 +2,9 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 
-from ..services import get_likes_count, like_project, is_already_liked
+from ..services import (
+	get_likes_count, like_project, is_already_liked, unlike_project
+)
 from ..models import Like
 from projects.models import Project
 from categories.models import Category
@@ -79,3 +81,27 @@ class IsAlreadyLikedServiceTestCase(TestCase):
 		)
 		liked = is_already_liked(self.project, some_user)
 		self.assertFalse(liked)
+
+
+class UnlikeProjectServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
+	def test_unlike_liked_project(self):
+		like_project(self.project.pk, self.user)
+		unliked = unlike_project(self.project.pk, self.user)
+		self.assertEqual(self.project.likes.count(), 0)
+		self.assertTrue(unliked)
+
+	def test_unlike_no_liked_project(self):
+		unliked = unlike_project(self.project.pk, self.user)
+		self.assertFalse(unliked)
+		self.assertEqual(self.project.likes.count(), 0)

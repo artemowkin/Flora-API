@@ -25,6 +25,16 @@ def like_project(project_pk: Union[UUID,str], user: User) -> bool:
 	return True
 
 
+def unlike_project(project_pk: Union[UUID,str], user: User) -> bool:
+	"""Unlike project by user if project liked"""
+	try:
+		like = Like.objects.get(project__pk=project_pk, user=user)
+		like.delete()
+		return True
+	except Like.DoesNotExist:
+		return False
+
+
 def is_already_liked(project: Project, user: User) -> bool:
 	"""Is project already liked by user"""
 	if not user.is_authenticated: return False
