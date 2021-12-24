@@ -2,6 +2,7 @@ from django.urls import path
 
 from . import views
 from likes import views as likes_views
+from comments import views as comments_views
 
 
 urlpatterns = [
@@ -27,5 +28,9 @@ urlpatterns = [
 	path(
 		'<uuid:pk>/unlike/', likes_views.UnlikeProjectView.as_view(),
 		name='unlike_project'
+	),
+	path(
+		'<uuid:pk>/comments/', comments_views.ProjectCommentsView.as_view(),
+		name='project_comments'
 	),
 ]

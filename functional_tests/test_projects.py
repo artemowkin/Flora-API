@@ -5,6 +5,7 @@ from django.urls import reverse
 from likes.models import Like
 from categories.models import Category
 from projects.models import Project, ProjectImage
+from comments.models import Comment
 
 
 User = get_user_model()
@@ -291,3 +292,31 @@ class UnlikeProjectEndpointTestCase(TestCase):
 		)
 		self.assertEqual(response.status_code, 200)
 		self.assertEqual(response.json(), {'unliked': False})
+
+
+class ProjectCommentsEndpointTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user, pinned=True
+		)
+		self.comment = Comment.objects.create(
+			user=self.user, project=self.project, text='some comment'
+		)
+
+	def test_get_all_comments(self):
+		response = self.client.get(
+			f'/api/v1/projects/{self.project.pk}/comments/'
+		)
+		self.assertEqual(response.status_code, 200)
+		json_response = response.json()
+		self.assertEqual(len(json_response), 1)
+		json_comment = json_response[0]
+		self.assertEqual(json_comment['pk'], str(self.comment.pk))
+		self.assertEqual(json_comment['user'], self.user.username)
+		self.assertEqual(json_comment['text'], self.comment.text)
