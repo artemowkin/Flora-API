@@ -421,6 +421,29 @@ paths:
                     type: boolean
       tags:
       - projects
+  /api/v1/projects/{project_pk}/unlike/:
+    post:
+      operationId: unlikeProject
+      description: Unlike project by user
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  unliked:
+                    type: boolean
+      tags:
+      - projects
   /api/v1/categories/:
     get:
       operationId: allCategories
