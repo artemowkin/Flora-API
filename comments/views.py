@@ -1,7 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .services import get_project_comments, CreateCommentService
+from .services import (
+	get_project_comments, CreateCommentService, delete_project_comment
+)
 from .serializers import CommentSerializer
 
 
@@ -34,3 +36,10 @@ class ProjectCommentsView(APIView):
 		return Response({
 			'detail': "You can't reply on comment on not the same project"
 		}, status=400)
+
+
+class DeleteProjectCommentView(APIView):
+
+	def delete(self, request, pk, comment_pk):
+		delete_project_comment(pk, comment_pk)
+		return Response(status=204)
