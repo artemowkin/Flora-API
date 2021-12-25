@@ -518,6 +518,32 @@ paths:
           description: "If project or reply on comment don't exist"
       tags:
       - projects
+  /api/v1/projects/{project_pk}/comments/{comment_pk}/:
+    delete:
+      operationId: deleteProject
+      description: Delete an existing project
+      parameters:
+      - name: project_pk
+        in: path
+        required: true
+        description: project pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      - name: comment_pk
+        in: path
+        required: true
+        description: comment pk field value (uuid)
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '403':
+          description: You are not authenticated
+        '204':
+          description: Successfully deleted
+      tags:
+      - projects
   /api/v1/categories/:
     get:
       operationId: allCategories
