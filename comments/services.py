@@ -27,9 +27,9 @@ class CreateCommentService:
 		self._user = user
 
 	def create(self, project_pk: Union[UUID,str], text: str,
-			reply_on_pk: Optional[UUID] = None) -> Comment:
+			reply_on: Optional[UUID] = None) -> Comment:
 		"""Create a new project comment"""
-		reply_on_comment = self._get_reply_on_comment(reply_on_pk)
+		reply_on_comment = self._get_reply_on_comment(reply_on)
 		project = get_object_or_404(Project, pk=project_pk)
 		self._check_reply_on_comment_project(reply_on_comment, project)
 		return Comment.objects.create(

@@ -30,3 +30,12 @@ class ProjectCommentsView(TestCase):
 			reverse('project_comments', args=[self.project.pk])
 		)
 		self.assertEqual(response.status_code, 200)
+
+	def test_post(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.post(
+			reverse('project_comments', args=[self.project.pk]), {
+				'text': 'new comment'
+			}, content_type='application/json'
+		)
+		self.assertEqual(response.status_code, 201)

@@ -320,3 +320,33 @@ class ProjectCommentsEndpointTestCase(TestCase):
 		self.assertEqual(json_comment['pk'], str(self.comment.pk))
 		self.assertEqual(json_comment['user'], self.user.username)
 		self.assertEqual(json_comment['text'], self.comment.text)
+
+	def test_create_a_new_project_comment_without_reply_on(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.post(
+			f'/api/v1/projects/{self.project.pk}/comments/', {
+				'text': 'new comment'
+			}, content_type='application/json'
+		)
+		self.assertEqual(response.status_code, 201)
+		json_response = response.json()
+		self.assertEqual(Comment.objects.count(), 2)
+		self.assertIn('pk', json_response)
+		self.assertEqual(json_response['user'], self.user.username)
+		self.assertEqual(json_response['text'], 'new comment')
+		self.assertIsNone(json_response['reply_on'])
+
+	def test_create_a_new_project_comment_with_reply_on(self):
+		self.client.login(username='testuser', password='testpass')
+		response = self.client.post(
+			f'/api/v1/projects/{self.project.pk}/comments/', {
+				'text': 'new comment', 'reply_on': str(self.comment.pk)
+			}, content_type='application/json'
+		)
+		self.assertEqual(response.status_code, 201)
+		json_response = response.json()
+		self.assertEqual(Comment.objects.count(), 2)
+		self.assertIn('pk', json_response)
+		self.assertEqual(json_response['user'], self.user.username)
+		self.assertEqual(json_response['text'], 'new comment')
+		self.assertEqual(json_response['reply_on'], str(self.comment.pk))

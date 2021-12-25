@@ -51,7 +51,6 @@ class CommentSerializerTestCase(TestCase):
 
 	def test_is_data_valid_with_reply_on(self):
 		data = {
-			'project': str(self.project.pk), 'user': self.user.id,
 			'text': 'some comment', 'reply_on': str(self.comment.pk)
 		}
 		serializer = CommentSerializer(data=data)

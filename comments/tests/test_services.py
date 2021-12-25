@@ -70,7 +70,7 @@ class CreateProjectCommentServiceTestCase(TestCase):
 		)
 		second_comment = self.create_comment_service.create(
 			project_pk=self.project.pk, text='second comment',
-			reply_on_pk=first_comment.pk
+			reply_on=first_comment.pk
 		)
 		self.assertEqual(second_comment.reply_on, first_comment)
 		self.assertEqual(second_comment.project, self.project)
@@ -89,7 +89,7 @@ class CreateProjectCommentServiceTestCase(TestCase):
 		with self.assertRaises(ValueError):
 			second_comment = self.create_comment_service.create(
 				project_pk=self.project.pk, text='second comment',
-				reply_on_pk=first_comment.pk
+				reply_on=first_comment.pk
 			)
 
 	def test_create_with_not_authenticated_user(self):
