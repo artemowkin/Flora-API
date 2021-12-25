@@ -19,6 +19,13 @@ def get_project_comments(project_pk: Union[UUID,str]) -> QuerySet:
 	return project.comments.all()
 
 
+def delete_project_comment(project_pk: Union[UUID,str],
+		comment_pk: Union[UUID,str]) -> None:
+	"""Delete the concrete project comment"""
+	comment = get_object_or_404(Comment, project__pk=project_pk, pk=comment_pk)
+	comment.delete()
+
+
 class CreateCommentService:
 	"""Service to create a new project comment"""
 

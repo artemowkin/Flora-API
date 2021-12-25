@@ -1,12 +1,17 @@
+from uuid import uuid4
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import AnonymousUser
+from django.http import Http404
 
 from categories.models import Category
 from projects.models import Project
 from ..models import Comment
-from ..services import get_project_comments, CreateCommentService
+from ..services import (
+	get_project_comments, CreateCommentService, delete_project_comment
+)
 
 
 User = get_user_model()
@@ -95,3 +100,31 @@ class CreateProjectCommentServiceTestCase(TestCase):
 	def test_create_with_not_authenticated_user(self):
 		with self.assertRaises(PermissionDenied):
 			CreateCommentService(AnonymousUser())
+
+
+class DeleteCommentServiceTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='Some category')
+		self.project = Project.objects.create(
+			title='Some project', description='Some description',
+			category=self.category, user=self.user
+		)
+		self.comment = Comment.objects.create(
+			project=self.project, user=self.user, text='some comment'
+		)
+
+	def test_delete_comment(self):
+		delete_project_comment(self.project.pk, self.comment.pk)
+		self.assertEqual(Comment.objects.count(), 0)
+
+	def test_delete_with_not_existing_project(self):
+		with self.assertRaises(Http404):
+			delete_project_comment(uuid4(), self.comment.pk)
+
+	def test_delete_with_not_existing_comment(self):
+		with self.assertRaises(Http404):
+			delete_project_comment(self.project.pk, uuid4())
