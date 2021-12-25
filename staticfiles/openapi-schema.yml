@@ -478,6 +478,46 @@ paths:
                 $ref: '#/components/schemas/ListComments'
       tags:
       - projects
+    post:
+      operationId: createProjectComment
+      description: Create a new comment on project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reply_on:
+                  type: string
+                  format: uuid
+                  required: false
+                  description: "UUID of comment that replies. Null if creating
+                  comment is not response on another comment"
+                text:
+                  type: string
+                  minLength: 1
+                  required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          description: "If you send incorrect data or reply on comment is on
+          another project than creating comment"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail: "You can't reply on comment on not the same project"
+        '403':
+          description: "If you are not authenticated"
+        '404':
+          description: "If project or reply on comment don't exist"
+      tags:
+      - projects
   /api/v1/categories/:
     get:
       operationId: allCategories
