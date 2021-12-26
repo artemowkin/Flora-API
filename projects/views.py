@@ -109,13 +109,12 @@ class ConcreteProjectView(BaseProjectCRUDView):
 		return Response(status=204)
 
 
-class ProjectImagesUploadView(BaseProjectCRUDView):
+class ProjectImagesUploadView(APIView):
 	parser_classes = [MultiPartParser]
 
 	def post(self, request, pk):
-		project = self.project_crud.get_concrete(pk)
 		images = [image for image in request.data.values()]
-		add_project_images(project, images)
+		add_project_images(pk, images)
 		return Response(status=204)
 
 

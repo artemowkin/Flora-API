@@ -176,8 +176,9 @@ class SearchProjectsService:
 		)
 
 
-def add_project_images(project: Project, images: list) -> None:
+def add_project_images(project_pk: Union[UUID,str], images: list) -> None:
 	"""Add images for project"""
+	project = get_object_or_404(Project, pk=project_pk)
 	for image in images:
 		ProjectImage.objects.create(project=project, image=image)
 
