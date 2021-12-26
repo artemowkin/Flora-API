@@ -6,7 +6,7 @@ from django.core.paginator import Paginator
 
 from .services import (
 	ProjectCRUDFacade, add_project_images, GetProjectsService,
-	pin_project, unpin_project, SearchProjectsService
+	pin_project, unpin_project, SearchProjectsService, get_pinned_projects
 )
 from .serializers import SimpleProjectSerializer, DetailProjectSerializer
 from categories.services import GetCategoriesService
@@ -122,8 +122,7 @@ class ProjectImagesUploadView(BaseProjectCRUDView):
 class PinnedProjectsView(APIView):
 
 	def get(self, request):
-		get_service = GetProjectsService()
-		pinned_projects = get_service.get_pinned()
+		pinned_projects = get_pinned_projects()
 		serialized_projects = SimpleProjectSerializer(
 			pinned_projects, many=True, context={'user': request.user}
 		).data

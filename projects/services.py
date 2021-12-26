@@ -37,11 +37,6 @@ class GetProjectsService:
 		project.views += 1
 		project.save()
 
-	def get_pinned(self) -> QuerySet:
-		"""Get pinned projects"""
-		pinned_projects = self._model.objects.filter(pinned=True)[:20:1]
-		return pinned_projects
-
 
 class BaseConcreteProjectService:
 	"""Base service with concrete project logic"""
@@ -198,6 +193,12 @@ def get_project_preview_url(images: QuerySet) -> str:
 	if not images: return ''
 	first_image_url = images[0].image.url
 	return first_image_url
+
+
+def get_pinned_projects() -> QuerySet:
+	"""Return pinned projects"""
+	pinned_projects = Project.objects.filter(pinned=True)[:20:1]
+	return pinned_projects
 
 
 def pin_project(project_pk: Union[UUID,str]) -> dict:

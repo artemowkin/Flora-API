@@ -8,7 +8,8 @@ from django.http import Http404
 
 from ..services import (
 	GetProjectsService, CreateProjectService, UpdateProjectService,
-	DeleteProjectService, pin_project, unpin_project, SearchProjectsService
+	DeleteProjectService, pin_project, unpin_project, SearchProjectsService,
+	get_pinned_projects
 )
 from ..models import Project
 from categories.models import Category
@@ -46,13 +47,25 @@ class GetProjectsServiceTestCase(TestCase):
 		with self.assertRaises(Http404):
 			service.get_concrete(uuid4())
 
+
+class GetPinnedProjectsTestCase(TestCase):
+
+	def setUp(self):
+		self.user = User.objects.create_superuser(
+			username='testuser', password='testpass'
+		)
+		self.category = Category.objects.create(title='some category')
+		self.project = Project.objects.create(
+			title='some project', description='some description',
+			category=self.category, user=self.user
+		)
+
 	def test_get_pinned(self):
 		new_project = Project.objects.create(
 			title='some project', description='some description',
 			category=self.category, user=self.user, pinned=True
 		)
-		service = GetProjectsService()
-		pinned_projects = service.get_pinned()
+		pinned_projects = get_pinned_projects()
 		self.assertEqual(len(pinned_projects), 1)
 		self.assertEqual(pinned_projects[0], new_project)
 
@@ -63,8 +76,7 @@ class GetProjectsServiceTestCase(TestCase):
 				category=self.category, user=self.user, pinned=True
 			)
 
-		service = GetProjectsService()
-		pinned_projects = service.get_pinned()
+		pinned_projects = get_pinned_projects()
 		self.assertEqual(len(pinned_projects), 20)
 
 
