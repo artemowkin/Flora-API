@@ -29,13 +29,4 @@ urlpatterns = [
 		'<uuid:pk>/unlike/', likes_views.UnlikeProjectView.as_view(),
 		name='unlike_project'
 	),
-	path(
-		'<uuid:pk>/comments/', comments_views.ProjectCommentsView.as_view(),
-		name='project_comments'
-	),
-	path(
-		'<uuid:pk>/comments/<uuid:comment_pk>/',
-		comments_views.DeleteProjectCommentView.as_view(),
-		name='delete_project_comment'
-	),
 ]
